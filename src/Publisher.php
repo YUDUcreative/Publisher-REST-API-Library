@@ -394,13 +394,6 @@ class Publisher {
     }
 
     /**
-     * Convenient methods
-     * (without directly building the request manually)
-     * All methods mirror available actions as specified in
-     * REST API docs
-     */
-
-    /**
      * CONVENIENT API REQUEST METHODS
      * The following methods are convenient and simple methods
      * which can be used to make calls without building the
