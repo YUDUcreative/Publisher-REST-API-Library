@@ -1,0 +1,9 @@
+/node_modules
+/vendor
+/.idea
+/.vagrant
+/coverage
+npm-debug.log
+.DS_Store
+.swp
+index.php

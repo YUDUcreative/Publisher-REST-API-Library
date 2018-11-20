@@ -1,0 +1,19 @@
+{
+    "name": "squibby/publisher",
+    "description": "YUDU Publisher Api PHP Library",
+    "type": "project",
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "authors": [
+        {
+            "name": "Andrew James Bibby",
+            "email": "andrewjamesbibby@hotmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Squibby\\Publisher\\": "src"
+        }
+    }
+}
