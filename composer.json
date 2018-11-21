@@ -1,19 +1,22 @@
 {
-    "name": "squibby/publisher",
-    "description": "YUDU Publisher Api PHP Library",
+    "name": "bibby/publisher",
+    "description": "YUDU Publisher REST API Library - PHP",
     "type": "project",
+    "license" : "MIT",
     "require": {
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "php": ">=5.5"
     },
     "authors": [
         {
             "name": "Andrew James Bibby",
-            "email": "andrewjamesbibby@hotmail.com"
+            "email": "andrew.bibby@yudu.com",
+            "homepage": "https://yudu.com"
         }
     ],
     "autoload": {
         "psr-4": {
-            "Squibby\\Publisher\\": "src"
+            "Bibby\\Publisher\\": "src"
         }
     }
 }

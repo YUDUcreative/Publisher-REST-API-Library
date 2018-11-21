@@ -1,17 +1,16 @@
 <?php
 
-namespace Squibby\Publisher;
+namespace Bibby\Publisher;
 
 use GuzzleHttp\Client;
-use XMLBuilder;
 
 /**
  * YUDU REST API Wrapper Library
  *
- * @package   squibby/publisher
+ * @package   bibby/publisher
  * @author    Andrew Bibby <support@yudu.com>
- * @license TODO
- * @link TODO
+ * @license   MIT
+ * @link      https://github.com/YUDUcreative/Publisher-REST-API-Library
  */
 
 class Publisher {
@@ -81,6 +80,7 @@ class Publisher {
 
     /**
      * Publisher constructor
+     *
      * Initilizes Publisher object and creates guzzle client
      *
      * @param $key
@@ -98,6 +98,7 @@ class Publisher {
 
     /**
      * Get
+     *
      * Sets the GET request method
      *
      * @return $this
@@ -110,6 +111,7 @@ class Publisher {
 
     /**
      * Post
+     *
      * Sets the request method to 'POST'
      *
      * @return $this
@@ -122,6 +124,7 @@ class Publisher {
 
     /**
      * Put
+     *
      * Sets the request method to 'PUT'
      *
      * @return $this
@@ -134,6 +137,7 @@ class Publisher {
 
     /**
      * Delete
+     *
      * Sets the request method to 'DELETE'
      *
      * @return $this
@@ -146,6 +150,7 @@ class Publisher {
 
     /**
      * Options
+     *
      * Sets the request method to 'OPTIONS'
      *
      * @return $this
@@ -158,6 +163,7 @@ class Publisher {
 
     /**
      * Resource
+     *
      * Sets the Query parameters for the request
      *
      * @param array $query
@@ -171,6 +177,7 @@ class Publisher {
 
     /**
      * Query
+     *
      * Sets the Query parameters for the request
      *
      * @param array $query
@@ -187,6 +194,7 @@ class Publisher {
 
     /**
      * Data
+     *
      * Sets the XML data for the request
      *
      * @param $data
@@ -200,6 +208,7 @@ class Publisher {
 
     /**
      * Create Request URL
+     *
      * @return string
      */
     private function createRequestUrl()
@@ -209,6 +218,7 @@ class Publisher {
 
     /**
      * Create Signature
+     *
      * Creates a base-64 encoded HMAC-SHA256 hash signature
      *
      * @return string
@@ -220,6 +230,7 @@ class Publisher {
 
     /**
      * String To Sign
+     *
      * Builds the URL string to be signed
      *
      * @return string
@@ -231,6 +242,7 @@ class Publisher {
 
     /**
      * Create Query String
+     *
      * Prepares the query string to the format
      * as expected by the API.
      *
@@ -250,6 +262,7 @@ class Publisher {
 
     /**
      * ToJson
+     *
      * Sets output 'JSON' and triggers request
      */
     public function toJson()
@@ -260,6 +273,7 @@ class Publisher {
 
     /**
      * ToXML
+     *
      * Sets output 'XML' and triggers request
      */
     public function toXML()
@@ -270,6 +284,7 @@ class Publisher {
 
     /**
      * ToArray
+     *
      * Sets output 'JSON' and triggers request
      */
     public function toArray()
@@ -280,6 +295,7 @@ class Publisher {
 
     /**
      * Debug
+     *
      * Returns an array of all object variables which were
      * used in the last API call. This is useful for
      * inspecting parameters used when debugging.
@@ -293,6 +309,7 @@ class Publisher {
 
     /**
      * Reset
+     *
      * Stores all current vars to last query variable for debugging,
      * resets the class variables back to starting values which
      * prevents contaminating subsequent requests.
@@ -317,46 +334,42 @@ class Publisher {
 
     /**
      * Make
+     *
      * Makes a guzzle request to the Publisher API
      * Returns a formatted response
      *
-     * @returns json/XML/Array/Raw
+     * @returns Guzzle Obj
      * @throws PublisherRequestException
      */
     public function make()
     {
-        try {
-            // Current timestamp set
-            $this->query['timestamp'] = time();
+        //TODO wrap in try/catch - reset vars in all scenarios
 
-            // Request made to REST API
-            $response = $this->client->request($this->method, $this->createRequestUrl(), [
-                'headers' => [
-                    'Authentication' => $this->key,
-                    'Content-Type'   => 'application/vnd.yudu+xml',
-                    'Signature'      => $this->createSignature(),
-                ],
-                'http_errors' => false,
-                'body'        => $this->data
-            ]);
 
-            // Response formatted to output format
-            $formattedResponse = $this->formatResponse($response, $this->output);
+        // Current timestamp set
+        $this->query['timestamp'] = time();
 
-            // Class variables reset (to ensure future requests not contaminated)
-            $this->reset();
+        // Request made to REST API
+        $response = $this->client->request($this->method, $this->createRequestUrl(), [
+            'headers' => [
+                'Authentication' => $this->key,
+                'Content-Type'   => 'application/vnd.yudu+xml',
+                'Signature'      => $this->createSignature(),
+            ],
+            'http_errors' => false,
+            'body'        => $this->data
+        ]);
 
-            return $formattedResponse;
+        // Class variables reset (to ensure future requests not contaminated)
+        $this->reset();
 
-        } catch (\Exception $e) {
-            throw $e;
-            // Here i will throw a custom squibby/publisher exception.
-            // Also need to reset all vars here
-        }
+        // Return Guzzle Response Object
+        return $response;
     }
 
     /**
      * Format Response
+     *
      * Converts guzzle response into client expected response type
      *
      * @param $response - Guzzle response object
@@ -365,7 +378,22 @@ class Publisher {
      */
     private function formatResponse($response, $output)
     {
-        $xml = simplexml_load_string($response->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA);
+
+        //$doc = new \DOMDocument();
+        //$doc->loadXML($response->getBody());
+        //echo $doc->saveXML(); die();
+
+
+        $xml = simplexml_load_string($response->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA, 'http://schema.yudu.com');
+
+
+        $ns = $xml->getDocNamespaces(true);
+
+
+
+        print_r($xml->asXML()); die();
+       // print_r($xml->children('http://schema.yudu.com')); die();
+
 
         if($output === 'XML'){
             return $xml;
@@ -384,6 +412,7 @@ class Publisher {
 
     /**
      * Set Output
+     *
      * Sets the class output type
      *
      * @param $output
@@ -395,16 +424,19 @@ class Publisher {
 
     /**
      * CONVENIENT API REQUEST METHODS
+     *
      * The following methods are convenient and simple methods
      * which can be used to make calls without building the
      * requests manually. All methods mirror available API
      * endpoints as detailed in the YUDU Publisher API
      * documentation at:
+     *
      * https://github.com/yudugit/rest-api-documentation#uri-summary
      */
 
     /**
      * Get Links
+     *
      * Returns a list of links to the other available URIs
      */
     public function getLinks()
@@ -414,7 +446,8 @@ class Publisher {
 
     /**
      * Get Readers
-     * Returns a list of readers / single reader by ID
+     *
+     * Returns a list of readers
      *
      * @param null $id
      * @param array $query
@@ -433,19 +466,7 @@ class Publisher {
      */
     public function createReader($data)
     {
-        $dom = new \DomDocument();
-
-        $reader = $dom->createElementNS('http://schema.yudu.com', "reader");
-        $dom->appendChild($reader);
-
-        foreach($data as $key => $value)
-        {
-            $element = $dom->createElement($key);
-            $element->appendChild($dom->createTextNode($value));
-            $reader->appendChild($element);
-        }
-
-        $xml = $dom->saveXML();
+        $xml = XMLBuilder::reader($data);
 
         return $this->post()->resource('readers')->data($xml)->make();
     }
@@ -458,22 +479,7 @@ class Publisher {
      */
     public function updateReader($id, $data)
     {
-        $dom = new \DomDocument();
-
-        $reader = $dom->createElementNS('http://schema.yudu.com', "reader");
-
-        $reader->setAttribute("id", $id);
-
-        $dom->appendChild($reader);
-
-        foreach($data as $key => $value)
-        {
-            $element = $dom->createElement($key);
-            $element->appendChild($dom->createTextNode($value));
-            $reader->appendChild($element);
-        }
-
-        $xml = $dom->saveXML();
+        $xml = XMLBuilder::reader($data, $id);
 
         return $this->put()->resource('readers/' . $id)->data($xml)->make();
     }
@@ -490,7 +496,8 @@ class Publisher {
 
     /**
      * Get Editions
-     * Returns a list of editions / single edition by ID
+     *
+     * Returns a list of editions
      *
      * @param null $id
      * @param array $query
@@ -502,10 +509,109 @@ class Publisher {
         return $this->get()->resource($resource)->query($query)->make();
     }
 
-    // TODO
-    //public function sendNotifications(){
-    //
-    //}
+    /**
+     * Get Permissions
+     *
+     * Lists edition permissions by reader
+     *
+     * @param null $id
+     * @param array $query
+     */
+    public function getPermissions($id = null, $query = [])
+    {
+        $resource = $id ? "permissions/$id" : "permissions";
+
+        return $this->get()->resource($resource)->query($query)->make();
+    }
+
+    /**
+     * Creates a new permission for a reader
+     *
+     * @param $data
+     */
+    public function createPermission($data)
+    {
+        $xml = XMLBuilder::permission($data);
+
+        return $this->post()->resource('permissions')->data($xml)->make();
+    }
+
+    /**
+     * TODO Updates a reader permission broken!
+     *
+     * @param $id
+     * @param $data
+     */
+    public function updatePermission($id, $data)
+    {
+        $xml = XMLBuilder::reader($data);
+
+        return $this->put()->resource('permissions/' . $id)->data($xml)->make();
+    }
+
+    /**
+     * Creates a new permission for a reader
+     *
+     * @param $data
+     */
+    public function deletePermission($id)
+    {
+        return $this->delete()->resource('permissions/' . $id)->make();
+    }
+
+    /**
+     * Get Reader Logins
+     *
+     * @param null $id
+     * @param array $query
+     */
+    public function getReaderLogins($id = null, $query = [])
+    {
+        $resource = $id ? "readerLogins/$id" : "readerLogins";
+
+        return $this->get()->resource($resource)->query($query)->make();
+    }
+
+    /**
+     * Get Publications
+     *
+     * @param null $id
+     * @param array $query
+     */
+    public function getPublications($id = null, $query = [])
+    {
+        $resource = $id ? "publications/$id" : "publications";
+
+        return $this->get()->resource($resource)->query($query)->make();
+    }
+
+    /**
+     * TODO this returns 500.. why?
+     * Get Subscriptions
+     *
+     * @param null $id
+     * @param array $query
+     */
+    public function getSubscriptions($id = null, $query = [])
+    {
+        $resource = $id ? "subscriptions/$id" : "subscriptions";
+
+        return $this->get()->resource($resource)->query($query)->make();
+    }
+
+    // TODO subscriptionPeriods methods (can do withoutgetSubscriptions working..)
+
+    /**
+     * Remove Devices
+     *
+     * Removes all authorised devices for a user
+     *
+     * @param $id
+     */
+    public function removeDevices($id)
+    {
+        return $this->delete()->resource('readers/' . $id . '/authorisedDevices')->make();
+    }
 
 }
 
