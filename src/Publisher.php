@@ -69,14 +69,23 @@ class Publisher {
      *
      * @var string
      */
-    private $output = 'JSON';
+    private $output;
 
     /**
      * Last Request Debug Info
      *
      * @var array
      */
-    private $debug = [];
+    private $debugInfo = [];
+
+    /**
+     * Debug
+     *
+     *  Guzzle debug mode
+     *
+     * @var bool
+     */
+    private $debug = false;
 
     /**
      * Publisher constructor
@@ -103,7 +112,7 @@ class Publisher {
      *
      * @return $this
      */
-    public function get()
+    private function get()
     {
         $this->method = 'GET';
         return $this;
@@ -116,7 +125,7 @@ class Publisher {
      *
      * @return $this
      */
-    public function post()
+    private function post()
     {
         $this->method = 'POST';
         return $this;
@@ -129,7 +138,7 @@ class Publisher {
      *
      * @return $this
      */
-    public function put()
+    private function put()
     {
         $this->method = 'PUT';
         return $this;
@@ -142,7 +151,7 @@ class Publisher {
      *
      * @return $this
      */
-    public function delete()
+    private function delete()
     {
         $this->method = 'DELETE';
         return $this;
@@ -155,7 +164,7 @@ class Publisher {
      *
      * @return $this
      */
-    public function options()
+    private function options()
     {
         $this->method = 'OPTIONS';
         return $this;
@@ -169,7 +178,7 @@ class Publisher {
      * @param array $query
      * @return $this
      */
-    public function resource($resource)
+    private function resource($resource)
     {
         $this->resource = $resource;
         return $this;
@@ -183,7 +192,7 @@ class Publisher {
      * @param array $query
      * @return $this
      */
-    public function query($query = [])
+    private function query($query = [])
     {
         foreach($query as $key => $value)
         {
@@ -248,7 +257,7 @@ class Publisher {
      *
      * @return string
      */
-    public function createQueryString()
+    private function createQueryString()
     {
         // Sort query alphabetically
         ksort($this->query);
@@ -261,75 +270,51 @@ class Publisher {
     }
 
     /**
-     * ToJson
-     *
-     * Sets output 'JSON' and triggers request
-     */
-    public function toJson()
-    {
-        $this->output = 'JSON';
-        return $this->make();
-    }
-
-    /**
-     * ToXML
-     *
-     * Sets output 'XML' and triggers request
-     */
-    public function toXML()
-    {
-        $this->output = 'XML';
-        return $this->make();
-    }
-
-    /**
-     * ToArray
-     *
-     * Sets output 'JSON' and triggers request
-     */
-    public function toArray()
-    {
-        $this->output = 'ARRAY';
-        return $this->make();
-    }
-
-    /**
-     * Debug
+     * Debug Info
      *
      * Returns an array of all object variables which were
-     * used in the last API call. This is useful for
-     * inspecting parameters used when debugging.
+     * used in the last API call.
      *
      * @return array
      */
-    public function debug()
+    public function debugInfo()
     {
-        return $this->debug;
+        return $this->debugInfo;
+    }
+
+    public function debug($debug = false)
+    {
+        $this->debug = $debug ? true : false;
     }
 
     /**
      * Reset
      *
-     * Stores all current vars to last query variable for debugging,
-     * resets the class variables back to starting values which
-     * prevents contaminating subsequent requests.
+     * Resets class variables back to starting values to
+     * prevent contaminating subsequent requests.
      */
     private function reset()
     {
-        // Fills debug with current class variable values
-        $this->debug = [
+        $this->method = null;
+        $this->resource = null;
+        $this->query = [];
+        $this->data = [];
+    }
+
+    /**
+     * Set Debug Info
+     *
+     * Fills debug info with current class variable values
+     */
+    private function setDebugInfo()
+    {
+        $this->debugInfo = [
             'method'   => $this->method,
             'resource' => $this->resource,
             'query'    => $this->query,
             'data'     => $this->data,
             'output'   => $this->output,
         ];
-
-        // Resets class variables back to original values
-        $this->method = null;
-        $this->resource = null;
-        $this->query = [];
-        $this->data = [];
     }
 
     /**
@@ -343,82 +328,80 @@ class Publisher {
      */
     public function make()
     {
-        //TODO wrap in try/catch - reset vars in all scenarios
+        try {
+            // Current timestamp set
+            $this->query['timestamp'] = time();
 
+            // Request made to REST API
+            $response = $this->client->request($this->method, $this->createRequestUrl(), [
+                'debug'   => $this->debug,
+                'headers' => [
+                    'Authentication' => $this->key,
+                    'Content-Type'   => 'application/vnd.yudu+xml',
+                    'Signature'      => $this->createSignature(),
+                ],
+                'http_errors' => false,
+                'body'        => $this->data
+            ]);
 
-        // Current timestamp set
-        $this->query['timestamp'] = time();
+            $this->response = $response;
+            $this->setDebugInfo();
+            $this->reset();
 
-        // Request made to REST API
-        $response = $this->client->request($this->method, $this->createRequestUrl(), [
-            'headers' => [
-                'Authentication' => $this->key,
-                'Content-Type'   => 'application/vnd.yudu+xml',
-                'Signature'      => $this->createSignature(),
-            ],
-            'http_errors' => false,
-            'body'        => $this->data
-        ]);
+        } catch(\Exception $e) {
+            $this->setDebugInfo();
+            $this->reset();
+            throw $e;
+        }
 
-        // Class variables reset (to ensure future requests not contaminated)
-        $this->reset();
-
-        // Return Guzzle Response Object
-        return $response;
+        return $this;
     }
 
     /**
-     * Format Response
+     * Format
      *
      * Converts guzzle response into client expected response type
      *
-     * @param $response - Guzzle response object
-     * @param $output - Output format
-     * @returns json/XML/Array/Raw
+     * @returns string/json/XML/Array/Guzzle
      */
-    private function formatResponse($response, $output)
+    public function format()
     {
-
-        //$doc = new \DOMDocument();
-        //$doc->loadXML($response->getBody());
-        //echo $doc->saveXML(); die();
-
-
-        $xml = simplexml_load_string($response->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA, 'http://schema.yudu.com');
-
-
-        $ns = $xml->getDocNamespaces(true);
-
-
-
-        print_r($xml->asXML()); die();
-       // print_r($xml->children('http://schema.yudu.com')); die();
-
-
-        if($output === 'XML'){
-            return $xml;
+        // When in debug mode only raw request/response returned
+        if($this->debug){
+            return (string) $this->response->getBody();
         }
 
-        if($output === 'JSON'){
+        // Build XML object from XML response
+        $xml = simplexml_load_string($this->response->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA, 'http://schema.yudu.com');
+
+        if($this->output === 'XML'){
+            return $xml->asXML();
+        }
+
+        if($this->output === 'JSON'){
             return json_encode($xml);
         }
 
-        if($output === 'ARRAY'){
+        if($this->output === 'ARRAY'){
             return json_decode(json_encode($xml), true);
         }
 
-        return $response->getBody();
+        return $response;
     }
 
     /**
      * Set Output
      *
-     * Sets the class output type
+     * Sets the class output format type
      *
      * @param $output
      */
     public function setOutput($output)
     {
+        if(! in_array($output, ['JSON', 'ARRAY', 'XML'])){
+            throw new \Exception('Cannot set invalid output type - must be one of JSON / ARRAY / XML');
+        }
+
         $this->output = $output;
     }
 
@@ -456,7 +439,7 @@ class Publisher {
     {
         $resource = $id ? "readers/$id" : "readers";
 
-        return $this->get()->resource($resource)->query($query)->make();
+        return $this->get()->resource($resource)->query($query)->make()->format();
     }
 
     /**
@@ -468,7 +451,7 @@ class Publisher {
     {
         $xml = XMLBuilder::reader($data);
 
-        return $this->post()->resource('readers')->data($xml)->make();
+        return $this->post()->resource('readers')->data($xml)->make()->format();
     }
 
     /**
@@ -481,7 +464,7 @@ class Publisher {
     {
         $xml = XMLBuilder::reader($data, $id);
 
-        return $this->put()->resource('readers/' . $id)->data($xml)->make();
+        return $this->put()->resource('readers/' . $id)->data($xml)->make()->format();
     }
 
     /**
@@ -491,7 +474,7 @@ class Publisher {
      */
     public function deleteReader($id)
     {
-        return $this->delete()->resource('readers/' . $id)->make();
+        return $this->delete()->resource('readers/' . $id)->make()->format();
     }
 
     /**
@@ -506,7 +489,7 @@ class Publisher {
     {
         $resource = $id ? "editions/$id" : "editions";
 
-        return $this->get()->resource($resource)->query($query)->make();
+        return $this->get()->resource($resource)->query($query)->make()->format();
     }
 
     /**
@@ -521,7 +504,7 @@ class Publisher {
     {
         $resource = $id ? "permissions/$id" : "permissions";
 
-        return $this->get()->resource($resource)->query($query)->make();
+        return $this->get()->resource($resource)->query($query)->make()->format();
     }
 
     /**
@@ -533,7 +516,7 @@ class Publisher {
     {
         $xml = XMLBuilder::permission($data);
 
-        return $this->post()->resource('permissions')->data($xml)->make();
+        return $this->post()->resource('permissions')->data($xml)->make()->format();
     }
 
     /**
@@ -546,7 +529,7 @@ class Publisher {
     {
         $xml = XMLBuilder::reader($data);
 
-        return $this->put()->resource('permissions/' . $id)->data($xml)->make();
+        return $this->put()->resource('permissions/' . $id)->data($xml)->make()->format();
     }
 
     /**
@@ -556,7 +539,7 @@ class Publisher {
      */
     public function deletePermission($id)
     {
-        return $this->delete()->resource('permissions/' . $id)->make();
+        return $this->delete()->resource('permissions/' . $id)->make()->format();
     }
 
     /**
@@ -569,7 +552,7 @@ class Publisher {
     {
         $resource = $id ? "readerLogins/$id" : "readerLogins";
 
-        return $this->get()->resource($resource)->query($query)->make();
+        return $this->get()->resource($resource)->query($query)->make()->format();
     }
 
     /**
@@ -582,7 +565,7 @@ class Publisher {
     {
         $resource = $id ? "publications/$id" : "publications";
 
-        return $this->get()->resource($resource)->query($query)->make();
+        return $this->get()->resource($resource)->query($query)->make()->format();
     }
 
     /**
@@ -596,7 +579,7 @@ class Publisher {
     {
         $resource = $id ? "subscriptions/$id" : "subscriptions";
 
-        return $this->get()->resource($resource)->query($query)->make();
+        return $this->get()->resource($resource)->query($query)->make()->format();
     }
 
     // TODO subscriptionPeriods methods (can do withoutgetSubscriptions working..)
@@ -610,7 +593,7 @@ class Publisher {
      */
     public function removeDevices($id)
     {
-        return $this->delete()->resource('readers/' . $id . '/authorisedDevices')->make();
+        return $this->delete()->resource('readers/' . $id . '/authorisedDevices')->make()->format();
     }
 
 }
