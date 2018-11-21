@@ -173,7 +173,7 @@ class Publisher {
     /**
      * Resource
      *
-     * Sets the Query parameters for the request
+     * Sets the resource URI
      *
      * @param array $query
      * @return $this
@@ -282,6 +282,13 @@ class Publisher {
         return $this->debugInfo;
     }
 
+    /**
+     * Debug
+     *
+     * Turns guzzle debug mode on / off
+     *
+     * @param bool $debug
+     */
     public function debug($debug = false)
     {
         $this->debug = $debug ? true : false;
@@ -443,6 +450,8 @@ class Publisher {
     }
 
     /**
+     * Create Reader
+     *
      * Creates a new Publisher Reader
      *
      * @param $data
@@ -455,6 +464,8 @@ class Publisher {
     }
 
     /**
+     * Update Reader
+     *
      * Updates a Publisher Reader
      *
      * @param $id
@@ -468,6 +479,8 @@ class Publisher {
     }
 
     /**
+     * Delete Reader
+     *
      * Deletes a Publisher Reader
      *
      * @param $id
@@ -508,6 +521,8 @@ class Publisher {
     }
 
     /**
+     * Create Permission
+     *
      * Creates a new permission for a reader
      *
      * @param $data
@@ -520,6 +535,8 @@ class Publisher {
     }
 
     /**
+     * Update Permission
+     *
      * TODO Updates a reader permission broken!
      *
      * @param $id
@@ -533,7 +550,9 @@ class Publisher {
     }
 
     /**
-     * Creates a new permission for a reader
+     * Delete Permission
+     *
+     * Deletes permission for a reader
      *
      * @param $data
      */
@@ -544,6 +563,8 @@ class Publisher {
 
     /**
      * Get Reader Logins
+     *
+     * Retreives all reader logins
      *
      * @param null $id
      * @param array $query
@@ -558,6 +579,8 @@ class Publisher {
     /**
      * Get Publications
      *
+     * Retreives list of Publications
+     *
      * @param null $id
      * @param array $query
      */
@@ -571,6 +594,8 @@ class Publisher {
     /**
      * TODO this returns 500.. why?
      * Get Subscriptions
+     *
+     * Retrieves all Subscriptions
      *
      * @param null $id
      * @param array $query
