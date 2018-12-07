@@ -7,10 +7,8 @@ use DOMDocument;
 /**
  * XMLBuilder
  *
- * This class assists in building up XML strings in the format
- * which is expected when making POST / PUT requests to the
- * YUDU Publisher REST API.
- *
+ * This class assists in building up XML strings in the format expected when
+ * making POST / PUT requests to the YUDU Publisher REST API.
  */
 class XMLBuilder {
 
@@ -20,7 +18,7 @@ class XMLBuilder {
      * Builds expected XML for creating/updating a reader
      *
      * @param $data
-     * @param null $id
+     * @param $id
      * @return string
      */
     public static function reader($data, $id = null)
@@ -51,7 +49,6 @@ class XMLBuilder {
      * Builds expected XML for creating/updating a permission
      *
      * @param $data
-     * @param null $id
      * @return string
      */
     public static function permission($data)
