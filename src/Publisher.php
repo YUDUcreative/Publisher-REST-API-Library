@@ -129,7 +129,7 @@ class Publisher extends Request{
     {
         $resource = $id ? "permissions/$id" : "permissions";
 
-        return $this->get()->resource($resource)->query($query)->make()->format();
+        return $this->method('GET')->resource($resource)->query($query)->make()->format();
     }
 
     /**
@@ -137,13 +137,13 @@ class Publisher extends Request{
      *
      * Creates a new permission for a reader
      *
-     * @param $data
+     * @param array $data
      */
     public function createPermission($data)
     {
-        $xml = XMLBuilder::permission($data);
+        $xml = XMLBuilder::createPermission($data);
 
-        return $this->post()->resource('permissions')->data($xml)->make()->format();
+        return $this->method('POST')->resource('permissions')->data($xml)->make()->format();
     }
 
     /**
@@ -156,9 +156,9 @@ class Publisher extends Request{
      */
     public function updatePermission($id, $data)
     {
-        $xml = XMLBuilder::reader($data);
+        $xml = XMLBuilder::updatePermission($data, $id);
 
-        return $this->put()->resource('permissions/' . $id)->data($xml)->make()->format();
+        return $this->method('PUT')->resource('permissions/' . $id)->data($xml)->make()->format();
     }
 
     /**
@@ -170,7 +170,7 @@ class Publisher extends Request{
      */
     public function deletePermission($id)
     {
-        return $this->delete()->resource('permissions/' . $id)->make()->format();
+        return $this->method('DELETE')->resource('permissions/' . $id)->make()->format();
     }
 
     /**
@@ -185,7 +185,7 @@ class Publisher extends Request{
     {
         $resource = $id ? "readerLogins/$id" : "readerLogins";
 
-        return $this->get()->resource($resource)->query($query)->make()->format();
+        return $this->method('GET')->resource($resource)->query($query)->make()->format();
     }
 
     /**
@@ -200,11 +200,11 @@ class Publisher extends Request{
     {
         $resource = $id ? "publications/$id" : "publications";
 
-        return $this->get()->resource($resource)->query($query)->make()->format();
+        return $this->method('GET')->resource($resource)->query($query)->make()->format();
     }
 
     /**
-     * TODO this returns 500.. why?
+     * TODO this returns 500 when retrieving ALL .... perhaps API bug why?
      * Get Subscriptions
      *
      * Retrieves all Subscriptions
@@ -216,10 +216,56 @@ class Publisher extends Request{
     {
         $resource = $id ? "subscriptions/$id" : "subscriptions";
 
-        return $this->get()->resource($resource)->query($query)->make()->format();
+        return $this->method('GET')->resource($resource)->query($query)->make()->format();
     }
 
-    // TODO subscriptionPeriods methods (can do withoutgetSubscriptions working..)
+    /**
+     * Get Subscription Periods
+     *
+     * Retrieves all subscription periods
+     */
+    public function getSubscriptionPeriods($id = null, $query = [])
+    {
+        $resource = $id ? "subscriptionPeriods/$id" : "subscriptionPeriods";
+
+        return $this->method('GET')->resource($resource)->query($query)->make()->format();
+    }
+
+    /**
+     * Create Subscription Period
+     *
+     * Creates a new subscription period
+     */
+    public function createSubscriptionPeriod($data){
+
+        $xml = XMLBuilder::createSubscriptionPeriod($data);
+
+        return $this->method('POST')->resource('subscriptionPeriods')->data($xml)->make()->format();
+    }
+
+    /**
+     * Update Subscription Period
+     *
+     * Updates a specified subscription period
+     */
+    public function updateSubscriptionPeriod($id, $data){
+
+        $xml = XMLBuilder::updateSubscriptionPeriod($id, $data);
+
+        return $this->method('PUT')->resource('subscriptionPeriods/' . $id )->data($xml)->make()->format();
+    }
+
+    /**
+     * Delete Subscription Period
+     *
+     * Deletes a readers Subscription Period
+     *
+     * @param $id
+     */
+    public function deleteSubscriptionPeriod($id)
+    {
+        return $this->method('DELETE')->resource('subscriptionPeriods/' . $id)->make()->format();
+    }
 
     /**
      * Remove Devices
@@ -230,10 +276,23 @@ class Publisher extends Request{
      */
     public function removeDevices($id)
     {
-        return $this->delete()->resource('readers/' . $id . '/authorisedDevices')->make()->format();
+        return $this->method('DELETE')->resource('readers/' . $id . '/authorisedDevices')->make()->format();
     }
 
+    /**
+     * Authenticate Password
+     *
+     * Authenticates a reader's password
+     *
+     * @param $id
+     * @param $password
+     */
+    public function authenticatePassword($id, $password)
+    {
+        $xml = XMLBuilder::authenticatePassword($password);
 
+        return $this->method('PUT')->resource('readers/' . $id . '/authentication')->data($xml)->make()->format();
+    }
 
     // TODO targeted push notifications
 

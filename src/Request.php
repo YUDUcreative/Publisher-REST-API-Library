@@ -179,7 +179,7 @@ abstract class Request {
      *
      * @return string
      */
-    private function createRequestUrl() : string
+    private function createRequestUrl()
     {
         return 'https://api.yudu.com/Yudu/services/2.0/' . $this->resource . '?' .  http_build_query($this->query);
     }
@@ -191,7 +191,7 @@ abstract class Request {
      *
      * @return string
      */
-    private function createSignature() : string
+    private function createSignature()
     {
         return base64_encode(hash_hmac('sha256', $this->stringToSign(), $this->secret, true));
     }
@@ -203,7 +203,7 @@ abstract class Request {
      *
      * @return string
      */
-    private function stringToSign() : string
+    private function stringToSign()
     {
         return $this->method . '/Yudu/services/2.0/' . $this->resource . '?' .  $this->createQueryString() . $this->data;
     }
@@ -216,7 +216,7 @@ abstract class Request {
      *
      * @return string
      */
-    private function createQueryString() : string
+    private function createQueryString()
     {
         // Sort query alphabetically
         ksort($this->query);
@@ -239,7 +239,7 @@ abstract class Request {
         $this->method = null;
         $this->resource = null;
         $this->query = [];
-        $this->data = [];
+        $this->data = '';
     }
 
     /**
@@ -266,11 +266,14 @@ abstract class Request {
                     'Signature'      => $this->createSignature(),
                 ],
                 'http_errors' => false,
-                //'body'        => $this->data // TODO need to use form_params!! as this way is deprecated??
+                'body'        => $this->data
             ]);
         } catch(\Exception $e) {
             throw $e;
         } finally{
+
+            // set debug array or not???
+
             // Always reset the class properties
             $this->reset();
         }
