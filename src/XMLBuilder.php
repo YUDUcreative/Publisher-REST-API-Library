@@ -189,7 +189,28 @@ class XMLBuilder {
         return $dom->saveXML();
     }
 
+    /**
+     * Create Token
+     *
+     * Builds expected XML for creating an SSO token
+     *
+     * @param $key
+     * @return string
+     */
+    public static function createToken($id)
+    {
+        $dom = new DomDocument();
 
+        $authToken = $dom->createElementNS('http://schema.yudu.com', "authToken");
+
+        $dom->appendChild($authToken);
+
+        $key = $dom->createElement('key');
+        $key->appendChild($dom->createTextNode($id));
+        $authToken->appendChild($key);
+
+        return $dom->saveXML();
+    }
 }
 
 

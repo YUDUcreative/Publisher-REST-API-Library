@@ -5,7 +5,7 @@ namespace Bibby\Publisher;
 /**
  * Publisher
  *
- * A YUDU Publisher REST API Wrapper Library
+ * A YUDU Publisher REST API Wrapper Library in PHP
  *
  * @package   bibby/publisher
  * @author    Andrew James Bibby <support@yudu.com>
@@ -294,9 +294,64 @@ class Publisher extends Request{
         return $this->method('PUT')->resource('readers/' . $id . '/authentication')->data($xml)->make()->format();
     }
 
-    // TODO targeted push notifications
+    /**
+     * Create Token
+     *
+     * Creates Single Sign On Token
+     * Token will authenticate for ANY edition
+     *
+     * @param $id
+     */
+    public function createToken($id){
+
+        $xml = XMLBuilder::createToken($id);
+
+        return $this->method('POST')->resource('token')->data($xml)->make()->format();
+    }
+
+    /**
+     * Create Publication Token
+     *
+     * Creates Single Sign On Token
+     * Token will authenticate for editions at given Publication
+     *
+     * @param $id
+     * @param $publication
+     */
+    public function createPublicationToken($id, $publication){
+
+        $xml = XMLBuilder::createToken($id);
+
+        return $this->method('POST')->resource('publications/' . $publication . '/token')->data($xml)->make()->format();
+    }
+
+    /**
+     * Create Edition Token
+     *
+     * Creates Single Sign On Token
+     * Token will authenticate for the edition only
+     *
+     * @param $id
+     * @param $edition
+     */
+    public function createEditionToken($id, $edition){
+
+        $xml = XMLBuilder::createToken($id);
+
+        return $this->method('POST')->resource('editions/' . $edition . '/token')->data($xml)->make()->format();
+
+    }
+
+    // createEditionToken
+    // createPublicationToken
+    //
+    // Single Edition Token
+
+
 
     // TODO SSO tokens...
+
+    // TODO targeted push notifications
 
 }
 
