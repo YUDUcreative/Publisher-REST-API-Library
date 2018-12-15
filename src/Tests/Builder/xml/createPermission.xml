@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<permission xmlns="http://schema.yudu.com">
+    <reader id="12345"/>
+    <edition id="64256"/>
+</permission>

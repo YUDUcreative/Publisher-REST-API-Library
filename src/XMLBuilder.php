@@ -13,23 +13,47 @@ use DOMDocument;
 class XMLBuilder {
 
     /**
-     * Reader
+     * Create Reader
      *
-     * Builds expected XML for creating/updating a reader
+     * Builds expected XML for creating a reader
      *
      * @param $data
-     * @param $id
      * @return string
      */
-    public static function reader($data, $id = null)
+    public static function createReader($data)
     {
         $dom = new DomDocument();
 
         $reader = $dom->createElementNS('http://schema.yudu.com', "reader");
 
-        if($id){
-            $reader->setAttribute("id", $id);
+        $dom->appendChild($reader);
+
+        foreach($data as $key => $value)
+        {
+            $element = $dom->createElement($key);
+            $element->appendChild($dom->createTextNode($value));
+            $reader->appendChild($element);
         }
+
+        return $dom->saveXML();
+    }
+
+    /**
+     * Update Reader
+     *
+     * Builds expected XML for updating a reader
+     *
+     * @param $data
+     * @param $id
+     * @return string
+     */
+    public static function updateReader($id, $data)
+    {
+        $dom = new DomDocument();
+
+        $reader = $dom->createElementNS('http://schema.yudu.com', "reader");
+
+        $reader->setAttribute("id", $id);
 
         $dom->appendChild($reader);
 
@@ -77,7 +101,7 @@ class XMLBuilder {
      * @param $data
      * @return string
      */
-    public static function updatePermission($data, $id)
+    public static function updatePermission($id, $data)
     {
         $dom = new DomDocument();
 
@@ -194,7 +218,7 @@ class XMLBuilder {
      *
      * Builds expected XML for creating an SSO token
      *
-     * @param $key
+     * @param $id
      * @return string
      */
     public static function createToken($id)

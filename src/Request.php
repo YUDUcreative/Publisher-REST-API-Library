@@ -2,15 +2,16 @@
 
 namespace Bibby\Publisher;
 
+use Bibby\Publisher\Exceptions\PublisherException;
 use GuzzleHttp\Client;
 
 /**
  * Class Request
  *
- * Handles the making of requests to the YUDU Publisher REST API
+ * Handles requests to the YUDU Publisher REST API
  * @package Bibby\Publisher
  */
-abstract class Request {
+class Request {
 
     /**
      * YUDU Publisher REST API Service Url
@@ -62,11 +63,11 @@ abstract class Request {
     private $data;
 
     /**
-     * Response output format
+     * HTTP Client
      *
-     * @var string
+     * @var \GuzzleHttp\Client
      */
-    private $output;
+    private $client;
 
     /**
      * Debug
@@ -87,27 +88,28 @@ abstract class Request {
     private $verify = true;
 
     /**
-     * Publisher constructor
-     *
-     * Initilizes Publisher object and creates guzzle client
+     * Request constructor.
      *
      * @param $key
      * @param $secret
-     * @param $debug
-     * @param $verify
+     * @param $otions
+     * @param $client
+     * @throws \Exception
      */
-    protected function __construct($key, $secret, $debug = false, $verify = true)
+    public function __construct($key, $secret, $options = [], \GuzzleHttp\Client $client = null)
     {
         // Set Credentials
         $this->key = $key;
         $this->secret = $secret;
 
-        // Set debug & ssl verification
-        $this->debug = $debug   ? true : false;
-        $this->verify = $verify ? true : false;
+        // Set debug
+        $this->debug = $options['debug'] ?? false;
 
-        // Create guzzle client
-        $this->client = new Client();
+        // Set ssl verification
+        $this->verify = $options['verify'] ?? true;
+
+        // Create client
+        $this->client = $client ? $client : new Client();
     }
 
     /**
@@ -119,10 +121,10 @@ abstract class Request {
      * @return $this
      * @throws \Exception
      */
-    protected function method($method)
+    public function method($method)
     {
-        if (! in_array($method, ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])){
-            throw new \Exception('Invalid method type given - must be GET, POST, PUT, DELETE or OPTIONS');
+        if (! in_array($method, ['GET', 'POST', 'PUT', 'DELETE'])){
+            throw new PublisherException('Invalid method type given - must be GET, POST, PUT, DELETE');
         }
 
         $this->method = $method;
@@ -137,7 +139,7 @@ abstract class Request {
      * @param string $resource
      * @return $this
      */
-    protected function resource($resource)
+    public function resource($resource)
     {
         $this->resource = $resource;
         return $this;
@@ -151,7 +153,7 @@ abstract class Request {
      * @param array $query
      * @return $this
      */
-    protected function query($query = [])
+    public function query($query = [])
     {
         foreach($query as $key => $value)
         {
@@ -168,7 +170,7 @@ abstract class Request {
      * @param string $data
      * @return $this
      */
-    protected function data($data)
+    public function data($data)
     {
         $this->data = $data;
         return $this;
@@ -181,7 +183,7 @@ abstract class Request {
      */
     private function createRequestUrl()
     {
-        return 'https://api.yudu.com/Yudu/services/2.0/' . $this->resource . '?' .  http_build_query($this->query);
+        return self::SERVICE_URL . $this->resource . '?' .  http_build_query($this->query);
     }
 
     /**
@@ -247,10 +249,11 @@ abstract class Request {
      *
      * Makes a guzzle request to the YUDU Publisher API
      *
-     * @returns $this
-     * @throws // TODO need to add custom exception
+     * @return $this
+     * @throws \Bibby\Publisher\Exceptions\PublisherException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    protected function make()
+    public function make()
     {
         try {
             // Current timestamp set
@@ -268,12 +271,10 @@ abstract class Request {
                 'http_errors' => false,
                 'body'        => $this->data
             ]);
-        } catch(\Exception $e) {
-            throw $e;
-        } finally{
-
-            // set debug array or not???
-
+        }
+        catch(\Exception $e) {
+            throw new PublisherException($e);
+        } finally {
             // Always reset the class properties
             $this->reset();
         }
@@ -291,8 +292,16 @@ abstract class Request {
     protected function format()
     {
 
-        $xml = simplexml_load_string($this->response->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA, 'http://schema.yudu.com');
+        // Return guzzle object
 
+
+        //print_r($this->response->getStatusCode()); die();
+        //
+        //if($this->format === 'GUZZLE')
+
+
+        $xml = simplexml_load_string($this->response->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA, 'http://schema.yudu.com');
+        //
         return $xml;
 
         // Outputs required...

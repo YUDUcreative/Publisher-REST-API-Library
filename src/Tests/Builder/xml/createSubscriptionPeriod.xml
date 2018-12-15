@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<subscriptionPeriod xmlns="http://schema.yudu.com">
+    <reader id="1234"/>
+    <subscription id="9876"/>
+    <startDate>2014-11-01T00:00:00Z</startDate>
+    <expiryDate>2016-11-01T00:00:00Z</expiryDate>
+</subscriptionPeriod>

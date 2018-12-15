@@ -22,28 +22,28 @@ namespace Bibby\Publisher;
 class Publisher extends Request{
 
     /**
-     * Publisher constructor
-     *
-     * Initilizes Publisher object
+     * Publisher constructor.
      *
      * @param $key
      * @param $secret
-     * @param $debug
-     * @param $verify
+     * @param bool $debug
+     * @param bool $verify
+     * @param null $client
+     * @throws \Exception
      */
-    public function __construct($key, $secret, $debug = false, $verify = true)
+    public function __construct($key, $secret, $options = [], $client = null)
     {
-        parent::__construct($key, $secret, $debug, $verify);
+        parent::__construct($key, $secret, $options, $client);
     }
 
     /**
      * Get Links
-     * // TODO this is broken.....
+     *
      * Returns a list of links to the other available URIs
      */
     public function getLinks()
     {
-        return $this->method('OPTIONS')->resource('')->make();
+        return $this->method('GET')->resource('')->make()->format();
     }
 
     /**
@@ -70,7 +70,7 @@ class Publisher extends Request{
      */
     public function createReader($data)
     {
-        $xml = XMLBuilder::reader($data);
+        $xml = XMLBuilder::createReader($data);
 
         return $this->method('POST')->resource('readers')->data($xml)->make()->format();
     }
@@ -85,7 +85,7 @@ class Publisher extends Request{
      */
     public function updateReader($id, $data)
     {
-        $xml = XMLBuilder::reader($data, $id);
+        $xml = XMLBuilder::updateReader($data, $id);
 
         return $this->method('PUT')->resource('readers/' . $id)->data($xml)->make()->format();
     }
@@ -339,17 +339,7 @@ class Publisher extends Request{
         $xml = XMLBuilder::createToken($id);
 
         return $this->method('POST')->resource('editions/' . $edition . '/token')->data($xml)->make()->format();
-
     }
-
-    // createEditionToken
-    // createPublicationToken
-    //
-    // Single Edition Token
-
-
-
-    // TODO SSO tokens...
 
     // TODO targeted push notifications
 
