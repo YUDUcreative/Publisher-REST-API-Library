@@ -10,8 +10,8 @@ class createReaderTest extends PublisherTestCase
     public function testCreateReaderXML()
     {
         $data = [
-            'username'              => 'example',
             'emailAddress'          => 'user@example.com',
+            'username'              => 'example',
             'firstName'             => 'example',
             'lastName'              => 'user',
             'nodeId'                => '12345',
@@ -21,9 +21,9 @@ class createReaderTest extends PublisherTestCase
 
         $xml = XMLBuilder::createReader($data);
 
-        $expected = simplexml_load_file(__DIR__ . '/xml/createReader.xml', 'SimpleXMLElement', LIBXML_NOBLANKS);
+        $expected = $this->loadXML('createReader');
 
-        $this->assertEquals($xml, $expected->asXML());
+        $this->assertEquals($xml, $expected);
     }
 }
 

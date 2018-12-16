@@ -2,6 +2,10 @@
 
 namespace Bibby\Publisher;
 
+use Bibby\Publisher\Exceptions\PublisherException;
+use Bibby\Publisher\XMLBuilder;
+use GuzzleHttp\Client;
+
 /**
  * Publisher
  *
@@ -19,21 +23,303 @@ namespace Bibby\Publisher;
  * https://github.com/yudugit/rest-api-documentation#uri-summary
  */
 
-class Publisher extends Request{
+class Publisher {
 
     /**
-     * Publisher constructor.
+     * YUDU Publisher REST API Service Url
+     *
+     * @var string
+     */
+    const SERVICE_URL = 'https://api.yudu.com/Yudu/services/2.0/';
+
+    /**
+     * YUDU Publisher REST API Key
+     *
+     * @var string
+     */
+    private $key;
+
+    /**
+     * YUDU Publisher REST API Secret
+     *
+     * @var string
+     */
+    private $secret;
+
+    /**
+     * Request options
+     *
+     * @var bool
+     */
+    private $options = [];
+
+    /**
+     * HTTP Client
+     *
+     * @var \GuzzleHttp\Client
+     */
+    private $client;
+
+    /**
+     * HTTP Method
+     *
+     * @var string
+     */
+    private $method;
+
+    /**
+     * YUDU Publisher Resource URI
+     *
+     * @var string
+     */
+    private $resource;
+
+    /**
+     * Request Query Parameters
+     *
+     * @var array
+     */
+    private $query = [];
+
+    /**
+     * Request XML data
+     *
+     * @var string
+     */
+    private $data;
+
+    /**
+     * Request constructor.
      *
      * @param $key
      * @param $secret
-     * @param bool $debug
-     * @param bool $verify
-     * @param null $client
+     * @param $options
+     * @param $client
      * @throws \Exception
      */
-    public function __construct($key, $secret, $options = [], $client = null)
+    public function __construct($key, $secret, Array $options = [], \GuzzleHttp\Client $client = null)
     {
-        parent::__construct($key, $secret, $options, $client);
+        // Set Credentials
+        $this->key = $key;
+        $this->secret = $secret;
+
+        // Set options
+        $this->options = $options;
+
+        // Set HTTP Client
+        $this->client = $client ? $client : new Client();
+    }
+
+    /**
+     * Method
+     *
+     * Sets the http request method
+     *
+     * @param $method
+     * @return $this
+     * @throws \Exception
+     */
+    public function method($method)
+    {
+        if (! in_array($method, ['GET', 'POST', 'PUT', 'DELETE'])){
+            throw new PublisherException('Invalid method type given - must be GET, POST, PUT, DELETE');
+        }
+
+        $this->method = $method;
+        return $this;
+    }
+
+    /**
+     * Resource
+     *
+     * Sets the resource URI
+     *
+     * @param string $resource
+     * @return $this
+     */
+    public function resource($resource)
+    {
+        // TODO trim any first slashes.
+        $this->resource = $resource;
+        return $this;
+    }
+
+    /**
+     * Query
+     *
+     * Sets the Query parameters for the request
+     *
+     * @param array $query
+     * @return $this
+     */
+    public function query($query = [])
+    {
+        foreach($query as $key => $value)
+        {
+            $this->query[$key] = $value;
+        }
+        return $this;
+    }
+
+    /**
+     * Data
+     *
+     * Sets the XML data for the request
+     *
+     * @param string $data
+     * @return $this
+     */
+    public function data($data)
+    {
+        $this->data = $data;
+        return $this;
+    }
+
+    /**
+     * Create Request URL
+     *
+     * @return string
+     */
+    private function createRequestUrl()
+    {
+        return self::SERVICE_URL . $this->resource . '?' .  http_build_query($this->query);
+    }
+
+    /**
+     * Create Signature
+     *
+     * Creates a base-64 encoded HMAC-SHA256 hash signature
+     *
+     * @return string
+     */
+    private function createSignature()
+    {
+        return base64_encode(hash_hmac('sha256', $this->stringToSign(), $this->secret, true));
+    }
+
+    /**
+     * String To Sign
+     *
+     * Builds the URL string to be signed
+     *
+     * @return string
+     */
+    private function stringToSign()
+    {
+        return $this->method . '/Yudu/services/2.0/' . $this->resource . '?' .  $this->createQueryString() . $this->data;
+    }
+
+    /**
+     * Create Query String
+     *
+     * Prepares the query string to the format
+     * as expected by the API.
+     *
+     * @return string
+     */
+    private function createQueryString()
+    {
+        // Sort query alphabetically
+        ksort($this->query);
+
+        // Build query string from query
+        $queryString = http_build_query($this->query);
+
+        // Only returns urldecoded query string
+        return urldecode($queryString);
+    }
+
+    /**
+     * Reset
+     *
+     * Resets class variables back to starting values to
+     * prevent contaminating subsequent requests.
+     */
+    private function reset()
+    {
+        $this->method = null;
+        $this->resource = null;
+        $this->query = [];
+        $this->data = '';
+    }
+
+
+    /**
+     * Make
+     *
+     * Makes an HTTP request to the YUDU Publisher API
+     *
+     * @return $this
+     * @throws \Bibby\Publisher\Exceptions\PublisherException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function make()
+    {
+        try {
+            // Unless overriden ensure current timestamp is set
+            $this->query['timestamp'] = $this->options['timestamp'] ?? time();
+
+            // Request made to YUDU Publisher
+            $this->response = $this->client->request($this->method, $this->createRequestUrl(), [
+                'debug'   => $this->options['debug'] ?? false,
+                'verify'  => $this->options['verify'] ?? true,
+                'headers' => [
+                    'Authentication' => $this->key,
+                    'Content-Type'   => 'application/vnd.yudu+xml',
+                    'Signature'      => $this->createSignature(),
+                ],
+                'http_errors' => false,
+                'body'        => $this->data
+            ]);
+        }
+        catch(\Exception $e) {
+            throw new PublisherException($e);
+        } finally {
+            // TODO fill 'last request' array with all details for debug/display
+            $this->reset();
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * Format
+     * // TODO this method
+     * Converts guzzle response into client expected response type
+     *
+     * @returns string/json/XML/Array/Guzzle
+     */
+    protected function format()
+    {
+
+        // Guzzle - guzzle object
+
+        // XML Object
+
+        // String
+
+        //Array
+
+        //JSON
+
+
+        // Return guzzle object
+
+
+        //print_r($this->response->getStatusCode()); die();
+        //
+        //if($this->format === 'GUZZLE')
+
+
+        $xml = simplexml_load_string($this->response->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA, 'http://schema.yudu.com');
+        //
+        return $xml;
+
+        // Outputs required...
+
+        // raw guzzle , xml object , xml string
+
+        // may need to do some status checking here to decode what to retiurn
     }
 
     /**
@@ -43,22 +329,29 @@ class Publisher extends Request{
      */
     public function getLinks()
     {
-        return $this->method('GET')->resource('')->make()->format();
+        return $this->method('GET')->resource('')->make();
+    }
+
+    /**
+     * Get Reader
+     *
+     * Returns a Publisher reader
+     * @param null $id
+     */
+    public function getReader($id)
+    {
+        return $this->method('GET')->resource("readers/$id")->make();
     }
 
     /**
      * Get Readers
      *
      * Returns a list of readers
-     *
-     * @param null $id
      * @param array $query
      */
-    public function getReaders($id = null, $query = [])
+    public function getReaders($query = [])
     {
-        $resource = $id ? "readers/$id" : "readers";
-
-        return $this->method('GET')->resource($resource)->query($query)->make()->format();
+        return $this->method('GET')->resource('readers')->query($query)->make();
     }
 
     /**
@@ -72,7 +365,7 @@ class Publisher extends Request{
     {
         $xml = XMLBuilder::createReader($data);
 
-        return $this->method('POST')->resource('readers')->data($xml)->make()->format();
+        return $this->method('POST')->resource('readers')->data($xml)->make();
     }
 
     /**
@@ -85,9 +378,9 @@ class Publisher extends Request{
      */
     public function updateReader($id, $data)
     {
-        $xml = XMLBuilder::updateReader($data, $id);
+        $xml = XMLBuilder::updateReader($id, $data);
 
-        return $this->method('PUT')->resource('readers/' . $id)->data($xml)->make()->format();
+        return $this->method('PUT')->resource('readers/' . $id)->data($xml)->make();
     }
 
     /**
@@ -99,37 +392,51 @@ class Publisher extends Request{
      */
     public function deleteReader($id)
     {
-        return $this->method('DELETE')->resource('readers/' . $id)->make()->format();
+        return $this->method('DELETE')->resource('readers/' . $id)->make();
     }
 
     /**
      * Get Editions
      *
      * Returns a list of editions
-     *
-     * @param $id
      * @param array $query
      */
-    public function getEditions($id = null, $query = [])
+    public function getEditions($query = [])
     {
-        $resource = $id ? "editions/$id" : "editions";
+        return $this->method('GET')->resource('editions')->query($query)->make();
+    }
 
-        return $this->method('GET')->resource($resource)->query($query)->make()->format();
+    /**
+     * Get Edition
+     *
+     * Returns a specific edition
+     * @param $id
+     */
+    public function getEdition($id)
+    {
+        return $this->method('GET')->resource("editions/$id" )->make();
     }
 
     /**
      * Get Permissions
      *
      * Lists edition permissions by reader
-     *
-     * @param null $id
      * @param array $query
      */
-    public function getPermissions($id = null, $query = [])
+    public function getPermissions($query = [])
     {
-        $resource = $id ? "permissions/$id" : "permissions";
+        return $this->method('GET')->resource("permissions")->query($query)->make();
+    }
 
-        return $this->method('GET')->resource($resource)->query($query)->make()->format();
+    /**
+     * Get Permission
+     *
+     * Retrieves a specific permission
+     * @param $id
+     */
+    public function getPermission($id)
+    {
+        return $this->method('GET')->resource("permissions/$id")->make();
     }
 
     /**
@@ -143,22 +450,20 @@ class Publisher extends Request{
     {
         $xml = XMLBuilder::createPermission($data);
 
-        return $this->method('POST')->resource('permissions')->data($xml)->make()->format();
+        return $this->method('POST')->resource('permissions')->data($xml)->make();
     }
 
     /**
-     * Update Permission
-     *
-     * TODO Updates a reader permission broken!
+     * Update Permission TODO Updates a reader permission broken!
      *
      * @param $id
      * @param $data
      */
     public function updatePermission($id, $data)
     {
-        $xml = XMLBuilder::updatePermission($data, $id);
+        $xml = XMLBuilder::updatePermission($id, $data);
 
-        return $this->method('PUT')->resource('permissions/' . $id)->data($xml)->make()->format();
+        return $this->method('PUT')->resource("permissions/$id")->data($xml)->make();
     }
 
     /**
@@ -170,53 +475,73 @@ class Publisher extends Request{
      */
     public function deletePermission($id)
     {
-        return $this->method('DELETE')->resource('permissions/' . $id)->make()->format();
+        return $this->method('DELETE')->resource('permissions/' . $id)->make();
     }
 
     /**
      * Get Reader Logins
      *
      * Retreives all reader logins
-     *
-     * @param null $id
      * @param array $query
      */
-    public function getReaderLogins($id = null, $query = [])
+    public function getReaderLogins($query = [])
     {
-        $resource = $id ? "readerLogins/$id" : "readerLogins";
+        return $this->method('GET')->resource("readerLogins")->query($query)->make();
+    }
 
-        return $this->method('GET')->resource($resource)->query($query)->make()->format();
+    /**
+     * Get Reader Login
+     *
+     * Retreives a reader login
+     * @param $id
+     */
+    public function getReaderLogin($id)
+    {
+        return $this->method('GET')->resource("readerLogins/$id")->make();
     }
 
     /**
      * Get Publications
      *
      * Retreives list of Publications
-     *
-     * @param null $id
      * @param array $query
      */
-    public function getPublications($id = null, $query = [])
+    public function getPublications($query = [])
     {
-        $resource = $id ? "publications/$id" : "publications";
-
-        return $this->method('GET')->resource($resource)->query($query)->make()->format();
+        return $this->method('GET')->resource("publications")->query($query)->make();
     }
 
     /**
-     * TODO this returns 500 when retrieving ALL .... perhaps API bug why?
-     * Get Subscriptions
+     * Get Publication
+     *
+     * Retreives a single Publication
+     * @param $id
+     */
+    public function getPublications($id)
+    {
+        return $this->method('GET')->resource("publications/$id")->make();
+    }
+
+    /**
+     * Get Subscriptions TODO this returns 500 perhaps API bug why?
      *
      * Retrieves all Subscriptions
-     *
-     * @param null $id
      * @param array $query
      */
-    public function getSubscriptions($id = null, $query = [])
+    public function getSubscriptions($query = [])
     {
-        $resource = $id ? "subscriptions/$id" : "subscriptions";
+        return $this->method('GET')->resource("subscriptions")->query($query)->make();
+    }
 
-        return $this->method('GET')->resource($resource)->query($query)->make()->format();
+    /**
+     * Get Subscription
+     *
+     * Retrieves a single Subscription
+     * $id
+     */
+    public function getSubscriptions($id)
+    {
+        return $this->method('GET')->resource("subscriptions/$id")->make();
     }
 
     /**
@@ -224,11 +549,19 @@ class Publisher extends Request{
      *
      * Retrieves all subscription periods
      */
+    public function getSubscriptionPeriods($query = [])
+    {
+        return $this->method('GET')->resource("subscriptionPeriods")->make();
+    }
+
+    /**
+     * Get Subscription Period
+     *
+     * Retrieves a single subscription period
+     */
     public function getSubscriptionPeriods($id = null, $query = [])
     {
-        $resource = $id ? "subscriptionPeriods/$id" : "subscriptionPeriods";
-
-        return $this->method('GET')->resource($resource)->query($query)->make()->format();
+        return $this->method('GET')->resource("subscriptionPeriods/$id")->make();
     }
 
     /**
@@ -341,7 +674,24 @@ class Publisher extends Request{
         return $this->method('POST')->resource('editions/' . $edition . '/token')->data($xml)->make()->format();
     }
 
-    // TODO targeted push notifications
+    /**
+     * Send Targeted Notifications
+     *
+     * Sends out a targeted notification to specified subscribers
+     * Send Custom Notifications permission is required in
+     * order to send targeted notifications.
+     *
+     * @param $nodeId
+     * @param $title
+     * @param $message
+     * @param $subscribers
+     */
+    public function sendTargetedNotification($nodeId, $title, $message, $subscribers){
+
+        $xml = XMLBuilder::targetedNotification($nodeId, $title, $message, $subscribers);
+
+        return $this->method('POST')->resource('targetedNotifications')->data($xml)->make()->format();
+    }
 
 }
 

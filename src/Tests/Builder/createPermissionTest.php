@@ -16,9 +16,9 @@ class createPermissionTest extends PublisherTestCase
 
         $xml = XMLBuilder::createPermission($data);
 
-        $expected = simplexml_load_file(__DIR__ . '/xml/createPermission.xml', 'SimpleXMLElement', LIBXML_NOBLANKS);
+        $expected = $this->loadXML('createPermission');
 
-        $this->assertEquals($xml, $expected->asXML());
+        $this->assertEquals($xml, $expected);
     }
 }
 

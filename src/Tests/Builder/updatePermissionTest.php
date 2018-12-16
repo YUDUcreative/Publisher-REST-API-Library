@@ -15,9 +15,9 @@ class updatePermissionTest extends PublisherTestCase
 
         $xml = XMLBuilder::updatePermission(1, $data);
 
-        $expected = simplexml_load_file(__DIR__ . '/xml/updatePermission.xml', 'SimpleXMLElement', LIBXML_NOBLANKS);
+        $expected = $this->loadXML('updatePermission');
 
-        $this->assertEquals($xml, $expected->asXML());
+        $this->assertEquals($xml, $expected);
     }
 }
 

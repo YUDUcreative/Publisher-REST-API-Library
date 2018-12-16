@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <reader xmlns="http://schema.yudu.com" id="1">
-    <username>example</username>
     <emailAddress>user@example.com</emailAddress>
+    <username>example</username>
     <firstName>example</firstName>
     <lastName>user</lastName>
     <nodeId>12345</nodeId>

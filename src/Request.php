@@ -247,7 +247,7 @@ class Request {
     /**
      * Make
      *
-     * Makes a guzzle request to the YUDU Publisher API
+     * Makes an HTTP request to the YUDU Publisher API
      *
      * @return $this
      * @throws \Bibby\Publisher\Exceptions\PublisherException
@@ -275,7 +275,6 @@ class Request {
         catch(\Exception $e) {
             throw new PublisherException($e);
         } finally {
-            // Always reset the class properties
             $this->reset();
         }
 

@@ -16,9 +16,9 @@ class updateSubscriptionPeriodTest extends PublisherTestCase
 
         $xml = XMLBuilder::updateSubscriptionPeriod(1, $data);
 
-        $expected = simplexml_load_file(__DIR__ . '/xml/updateSubscriptionPeriod.xml', 'SimpleXMLElement', LIBXML_NOBLANKS);
+        $expected = $this->loadXML('updateSubscriptionPeriod');
 
-        $this->assertEquals($xml, $expected->asXML());
+        $this->assertEquals($xml, $expected);
     }
 }
 

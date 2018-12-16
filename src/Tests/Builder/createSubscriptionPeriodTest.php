@@ -18,9 +18,9 @@ class createSubscriptionPeriodTest extends PublisherTestCase
 
         $xml = XMLBuilder::createSubscriptionPeriod($data);
 
-        $expected = simplexml_load_file(__DIR__ . '/xml/createSubscriptionPeriod.xml', 'SimpleXMLElement', LIBXML_NOBLANKS);
+        $expected = $this->loadXML('createSubscriptionPeriod');
 
-        $this->assertEquals($xml, $expected->asXML());
+        $this->assertEquals($xml, $expected);
     }
 }
 

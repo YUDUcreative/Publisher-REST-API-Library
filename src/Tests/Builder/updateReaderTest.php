@@ -10,8 +10,8 @@ class updateReaderTest extends PublisherTestCase
     public function testUpdateReaderXML()
     {
         $data = [
-            'username'              => 'example',
             'emailAddress'          => 'user@example.com',
+            'username'              => 'example',
             'firstName'             => 'example',
             'lastName'              => 'user',
             'nodeId'                => '12345',
@@ -21,9 +21,9 @@ class updateReaderTest extends PublisherTestCase
 
         $xml = XMLBuilder::updateReader(1, $data);
 
-        $expected = simplexml_load_file(__DIR__ . '/xml/updateReader.xml', 'SimpleXMLElement', LIBXML_NOBLANKS);
+        $expected = $this->loadXML('updateReader');
 
-        $this->assertEquals($xml, $expected->asXML());
+        $this->assertEquals($xml, $expected);
     }
 }
 

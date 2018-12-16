@@ -11,9 +11,9 @@ class createTokenTest extends PublisherTestCase
     {
         $xml = XMLBuilder::createToken('user12345');
 
-        $expected = simplexml_load_file(__DIR__ . '/xml/createToken.xml', 'SimpleXMLElement', LIBXML_NOBLANKS);
+        $expected = $this->loadXML('createToken');
 
-        $this->assertEquals($xml, $expected->asXML());
+        $this->assertEquals($xml, $expected);
     }
 }
 
