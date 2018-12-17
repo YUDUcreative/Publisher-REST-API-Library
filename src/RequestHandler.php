@@ -119,8 +119,7 @@ class RequestHandler {
      */
     protected function resource($resource)
     {
-        // TODO trim any first slashes.
-        $this->resource = $resource;
+        $this->resource = ltrim($resource, '/');
         return $this;
     }
 
