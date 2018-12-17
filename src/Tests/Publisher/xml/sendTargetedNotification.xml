@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<targetedNotification xmlns="http://schema.yudu.com">
+    <nodeId>1234</nodeId>
+    <message>Hello World!</message>
+    <title>Targeted Notification</title>
+    <subscribers>
+        <subscriberUsername>billy123</subscriberUsername>
+        <subscriberUsername>unclebob69</subscriberUsername>
+        <subscriberUsername>Mjaxson</subscriberUsername>
+        <thirdPartySubscriberToken>cnfvwh4p93jcllljfd</thirdPartySubscriberToken>
+        <thirdPartySubscriberToken>g5q456uyhb565hta5br</thirdPartySubscriberToken>
+        <thirdPartySubscriberToken>vb49ierd39jgvr939kkjd</thirdPartySubscriberToken>
+    </subscribers>
+</targetedNotification>

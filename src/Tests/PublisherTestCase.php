@@ -2,17 +2,13 @@
 
 namespace Bibby\Publisher\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Bibby\Publisher\Exceptions\PublisherException;
-
-use Bibby\Publisher\Publisher;
-use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
+use PHPUnit\Framework\TestCase;
+use Bibby\Publisher\Publisher;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Client;
 
 class PublisherTestCase extends TestCase {
 
@@ -45,7 +41,7 @@ class PublisherTestCase extends TestCase {
     /**
      * History
      *
-     * Stores the history of all mocked guzzle requests
+     * History of all mocked guzzle requests
      * @var array
      */
     public $history = [];
@@ -87,62 +83,49 @@ class PublisherTestCase extends TestCase {
     /**
      * Gets the Request Uri from Guzzle history
      */
-    public function getRequestUri(){
+    public function getRequestUri()
+    {
         return $this->history[0]['request']->getUri()->__toString();
     }
 
     /**
      * Gets the Request Authentication Header
      */
-    public function getRequestAuthentication(){
+    public function getRequestAuthentication()
+    {
         return $this->history[0]['request']->getHeaders()['Authentication'][0];
     }
 
     /**
      * Gets the Request Content Type Header
      */
-    public function getRequestContentType(){
+    public function getRequestContentType()
+    {
         return $this->history[0]['request']->getHeaders()['Content-Type'][0];
     }
 
     /**
      * Gets the Request Signature Header
      */
-    public function getRequestSignature(){
+    public function getRequestSignature()
+    {
         return $this->history[0]['request']->getHeaders()['Signature'][0];
     }
 
     /**
      * Gets the Request Body
      */
-    public function getRequestBody(){
+    public function getRequestBody()
+    {
         return $this->history[0]['request']->getBody()->getContents();
     }
 
     /**
      * Gets the Request Method from Guzzle history
      */
-    public function getRequestMethod(){
-        return $this->history[0]['request']->getMethod();
-    }
-
-    /**
-     * Invoke Private Method
-     *
-     * Call protected/private method of a given class.
-     * @param $object - Instantiated object that we will run method on.
-     * @param $methodName - Method name to call
-     * @param array $parameters - Array of parameters to pass into method.
-     * @return mixed
-     * @throws \ReflectionException
-     */
-    public function invokePrivateMethod(&$object, $methodName, array $parameters = [])
+    public function getRequestMethod()
     {
-        $reflection = new \ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-
-        return $method->invokeArgs($object, $parameters);
+        return $this->history[0]['request']->getMethod();
     }
 
     /**
@@ -151,8 +134,9 @@ class PublisherTestCase extends TestCase {
      * @param $file
      * @return XML string
      */
-    protected function loadXML($file){
-        $file =  __DIR__ . '/Builder/xml/' . $file . '.xml';
+    protected function loadXML($file)
+    {
+        $file =  __DIR__ . '/Publisher/xml/' . $file . '.xml';
         $xml = simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOBLANKS);
         return $xml->asXML();
     }
@@ -161,16 +145,16 @@ class PublisherTestCase extends TestCase {
      * Confirms Request
      *
      * This method makes a number of assertions to confirm the headers
-     * and other data is passed to guzzle as expected
+     * and other data are passed to guzzle exactly as expected
      * @param array $expected
      */
-    protected function confirmRequest(Array $expected){
+    protected function confirmRequest(Array $expected)
+    {
         $this->assertEquals( $expected['method'], $this->getRequestMethod());
         $this->assertEquals(self::SERVICE_URL . $expected['uri'] . "?timestamp=" . self::TIMESTAMP, $this->getRequestUri());
         $this->assertEquals(self::KEY, $this->getRequestAuthentication());
         $this->assertEquals(self::CONTENT_TYPE, $this->getRequestContentType());
         $this->assertEquals($expected['signature'], $this->getRequestSignature());
-        $this->assertEquals($expected['body'] ?? '', $this->getRequestBody());
     }
 
 }

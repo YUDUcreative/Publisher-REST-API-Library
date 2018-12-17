@@ -3,6 +3,7 @@
 namespace Bibby\Publisher;
 
 use Bibby\Publisher\Exceptions\PublisherException;
+use Bibby\Publisher\ResponseHandler;
 use Bibby\Publisher\XMLBuilder;
 use GuzzleHttp\Client;
 
@@ -12,7 +13,7 @@ use GuzzleHttp\Client;
  * A YUDU Publisher REST API Wrapper Library in PHP
  *
  * @package   bibby/publisher
- * @author    Andrew James Bibby <support@yudu.com>
+ * @author    Andrew James Bibby
  * @license   MIT License
  * @version   0.0.1
  * @link      https://github.com/YUDUcreative/Publisher-REST-API-Library
@@ -22,7 +23,6 @@ use GuzzleHttp\Client;
  * endpoints as detailed in the YUDU Publisher API documentation at:
  * https://github.com/yudugit/rest-api-documentation#uri-summary
  */
-
 class Publisher {
 
     /**
@@ -49,7 +49,7 @@ class Publisher {
     /**
      * Request options
      *
-     * @var bool
+     * @var array
      */
     private $options = [];
 
@@ -119,7 +119,7 @@ class Publisher {
      * @return $this
      * @throws \Exception
      */
-    public function method($method)
+    private function method($method)
     {
         if (! in_array($method, ['GET', 'POST', 'PUT', 'DELETE'])){
             throw new PublisherException('Invalid method type given - must be GET, POST, PUT, DELETE');
@@ -137,7 +137,7 @@ class Publisher {
      * @param string $resource
      * @return $this
      */
-    public function resource($resource)
+    private function resource($resource)
     {
         // TODO trim any first slashes.
         $this->resource = $resource;
@@ -152,7 +152,7 @@ class Publisher {
      * @param array $query
      * @return $this
      */
-    public function query($query = [])
+    private function query($query = [])
     {
         foreach($query as $key => $value)
         {
@@ -169,7 +169,7 @@ class Publisher {
      * @param string $data
      * @return $this
      */
-    public function data($data)
+    private function data($data)
     {
         $this->data = $data;
         return $this;
@@ -189,7 +189,6 @@ class Publisher {
      * Create Signature
      *
      * Creates a base-64 encoded HMAC-SHA256 hash signature
-     *
      * @return string
      */
     private function createSignature()
@@ -243,7 +242,6 @@ class Publisher {
         $this->data = '';
     }
 
-
     /**
      * Make
      *
@@ -260,7 +258,7 @@ class Publisher {
             $this->query['timestamp'] = $this->options['timestamp'] ?? time();
 
             // Request made to YUDU Publisher
-            $this->response = $this->client->request($this->method, $this->createRequestUrl(), [
+            $response = $this->client->request($this->method, $this->createRequestUrl(), [
                 'debug'   => $this->options['debug'] ?? false,
                 'verify'  => $this->options['verify'] ?? true,
                 'headers' => [
@@ -275,51 +273,11 @@ class Publisher {
         catch(\Exception $e) {
             throw new PublisherException($e);
         } finally {
-            // TODO fill 'last request' array with all details for debug/display
             $this->reset();
         }
 
-        return $this->response;
-    }
-
-    /**
-     * Format
-     * // TODO this method
-     * Converts guzzle response into client expected response type
-     *
-     * @returns string/json/XML/Array/Guzzle
-     */
-    protected function format()
-    {
-
-        // Guzzle - guzzle object
-
-        // XML Object
-
-        // String
-
-        //Array
-
-        //JSON
-
-
-        // Return guzzle object
-
-
-        //print_r($this->response->getStatusCode()); die();
-        //
-        //if($this->format === 'GUZZLE')
-
-
-        $xml = simplexml_load_string($this->response->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA, 'http://schema.yudu.com');
-        //
-        return $xml;
-
-        // Outputs required...
-
-        // raw guzzle , xml object , xml string
-
-        // may need to do some status checking here to decode what to retiurn
+        return new ResponseHandler($response);
+        //return $response;
     }
 
     /**
@@ -364,7 +322,6 @@ class Publisher {
     public function createReader($data)
     {
         $xml = XMLBuilder::createReader($data);
-
         return $this->method('POST')->resource('readers')->data($xml)->make();
     }
 
@@ -449,12 +406,11 @@ class Publisher {
     public function createPermission($data)
     {
         $xml = XMLBuilder::createPermission($data);
-
         return $this->method('POST')->resource('permissions')->data($xml)->make();
     }
 
     /**
-     * Update Permission TODO Updates a reader permission broken!
+     * Update Permission
      *
      * @param $id
      * @param $data
@@ -462,7 +418,6 @@ class Publisher {
     public function updatePermission($id, $data)
     {
         $xml = XMLBuilder::updatePermission($id, $data);
-
         return $this->method('PUT')->resource("permissions/$id")->data($xml)->make();
     }
 
@@ -517,7 +472,7 @@ class Publisher {
      * Retreives a single Publication
      * @param $id
      */
-    public function getPublications($id)
+    public function getPublication($id)
     {
         return $this->method('GET')->resource("publications/$id")->make();
     }
@@ -539,7 +494,7 @@ class Publisher {
      * Retrieves a single Subscription
      * $id
      */
-    public function getSubscriptions($id)
+    public function getSubscription($id)
     {
         return $this->method('GET')->resource("subscriptions/$id")->make();
     }
@@ -551,7 +506,7 @@ class Publisher {
      */
     public function getSubscriptionPeriods($query = [])
     {
-        return $this->method('GET')->resource("subscriptionPeriods")->make();
+        return $this->method('GET')->resource("subscriptionPeriods")->query($query)->make();
     }
 
     /**
@@ -559,7 +514,7 @@ class Publisher {
      *
      * Retrieves a single subscription period
      */
-    public function getSubscriptionPeriods($id = null, $query = [])
+    public function getSubscriptionPeriod($id)
     {
         return $this->method('GET')->resource("subscriptionPeriods/$id")->make();
     }
@@ -569,11 +524,10 @@ class Publisher {
      *
      * Creates a new subscription period
      */
-    public function createSubscriptionPeriod($data){
-
+    public function createSubscriptionPeriod($data)
+    {
         $xml = XMLBuilder::createSubscriptionPeriod($data);
-
-        return $this->method('POST')->resource('subscriptionPeriods')->data($xml)->make()->format();
+        return $this->method('POST')->resource("subscriptionPeriods")->data($xml)->make();
     }
 
     /**
@@ -581,11 +535,10 @@ class Publisher {
      *
      * Updates a specified subscription period
      */
-    public function updateSubscriptionPeriod($id, $data){
-
+    public function updateSubscriptionPeriod($id, $data)
+    {
         $xml = XMLBuilder::updateSubscriptionPeriod($id, $data);
-
-        return $this->method('PUT')->resource('subscriptionPeriods/' . $id )->data($xml)->make()->format();
+        return $this->method('PUT')->resource("subscriptionPeriods/$id")->data($xml)->make();
     }
 
     /**
@@ -597,7 +550,7 @@ class Publisher {
      */
     public function deleteSubscriptionPeriod($id)
     {
-        return $this->method('DELETE')->resource('subscriptionPeriods/' . $id)->make()->format();
+        return $this->method('DELETE')->resource("subscriptionPeriods/$id")->make();
     }
 
     /**
@@ -609,7 +562,7 @@ class Publisher {
      */
     public function removeDevices($id)
     {
-        return $this->method('DELETE')->resource('readers/' . $id . '/authorisedDevices')->make()->format();
+        return $this->method('DELETE')->resource("readers/$id/authorisedDevices")->make();
     }
 
     /**
@@ -623,8 +576,7 @@ class Publisher {
     public function authenticatePassword($id, $password)
     {
         $xml = XMLBuilder::authenticatePassword($password);
-
-        return $this->method('PUT')->resource('readers/' . $id . '/authentication')->data($xml)->make()->format();
+        return $this->method('PUT')->resource("readers/$id/authentication")->data($xml)->make();
     }
 
     /**
@@ -635,11 +587,10 @@ class Publisher {
      *
      * @param $id
      */
-    public function createToken($id){
-
+    public function createToken($id)
+    {
         $xml = XMLBuilder::createToken($id);
-
-        return $this->method('POST')->resource('token')->data($xml)->make()->format();
+        return $this->method('POST')->resource('token')->data($xml)->make();
     }
 
     /**
@@ -651,11 +602,10 @@ class Publisher {
      * @param $id
      * @param $publication
      */
-    public function createPublicationToken($id, $publication){
-
+    public function createPublicationToken($id, $publication)
+    {
         $xml = XMLBuilder::createToken($id);
-
-        return $this->method('POST')->resource('publications/' . $publication . '/token')->data($xml)->make()->format();
+        return $this->method('POST')->resource("publications/$publication/token")->data($xml)->make();
     }
 
     /**
@@ -667,11 +617,10 @@ class Publisher {
      * @param $id
      * @param $edition
      */
-    public function createEditionToken($id, $edition){
-
+    public function createEditionToken($id, $edition)
+    {
         $xml = XMLBuilder::createToken($id);
-
-        return $this->method('POST')->resource('editions/' . $edition . '/token')->data($xml)->make()->format();
+        return $this->method('POST')->resource("editions/$edition/token")->data($xml)->make();
     }
 
     /**
@@ -686,11 +635,10 @@ class Publisher {
      * @param $message
      * @param $subscribers
      */
-    public function sendTargetedNotification($nodeId, $title, $message, $subscribers){
-
-        $xml = XMLBuilder::targetedNotification($nodeId, $title, $message, $subscribers);
-
-        return $this->method('POST')->resource('targetedNotifications')->data($xml)->make()->format();
+    public function sendTargetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers)
+    {
+        $xml = XMLBuilder::targetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers);
+        return $this->method('POST')->resource('targetedNotifications')->data($xml)->make();
     }
 
 }

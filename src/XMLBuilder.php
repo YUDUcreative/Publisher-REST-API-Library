@@ -5,7 +5,13 @@ namespace Bibby\Publisher;
 use DOMDocument;
 
 /**
- * XMLBuilder
+ * XML Builder
+ *
+ * @package   bibby/publisher
+ * @author    Andrew James Bibby
+ * @license   MIT License
+ * @version   0.0.1
+ * @link      https://github.com/YUDUcreative/Publisher-REST-API-Library
  *
  * This class assists in building up XML strings in the format expected when
  * making POST / PUT requests to the YUDU Publisher REST API.
@@ -232,6 +238,59 @@ class XMLBuilder {
         $key = $dom->createElement('key');
         $key->appendChild($dom->createTextNode($id));
         $authToken->appendChild($key);
+
+        return $dom->saveXML();
+    }
+
+    /**
+     * Targeted Notification
+     *
+     * Builds expected XML for sending a targeted notification
+     *
+     * @param $nodeId
+     * @param $title
+     * @param $message
+     * @param array $thirdPartySubscribers
+     * @param array $subscribers
+     * @return string
+     */
+    public static function targetedNotification($nodeId, $title, $message, $subscribers = [], $thirdPartySubscribers = [])
+    {
+        $dom = new DomDocument();
+
+        $targetedNotification = $dom->createElementNS('http://schema.yudu.com', "targetedNotification");
+
+        $dom->appendChild($targetedNotification);
+
+        $_nodeId = $dom->createElement('nodeId');
+        $_nodeId->appendChild($dom->createTextNode($nodeId));
+        $targetedNotification->appendChild($_nodeId);
+
+        $_message = $dom->createElement('message');
+        $_message->appendChild($dom->createTextNode($message));
+        $targetedNotification->appendChild($_message);
+
+        $_title = $dom->createElement('title');
+        $_title->appendChild($dom->createTextNode($title));
+        $targetedNotification->appendChild($_title);
+
+        $_subscribers = $dom->createElement('subscribers');
+
+        foreach($subscribers as $subscriber)
+        {
+            $element = $dom->createElement('subscriberUsername');
+            $element->appendChild($dom->createTextNode($subscriber));
+            $_subscribers->appendChild($element);
+        }
+
+        foreach($thirdPartySubscribers as $thirdPartySubscriber)
+        {
+            $element = $dom->createElement('thirdPartySubscriberToken');
+            $element->appendChild($dom->createTextNode($thirdPartySubscriber));
+            $_subscribers->appendChild($element);
+        }
+
+        $targetedNotification->appendChild($_subscribers);
 
         return $dom->saveXML();
     }
