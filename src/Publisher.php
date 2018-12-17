@@ -238,7 +238,7 @@ class Publisher extends RequestHandler {
     }
 
     /**
-     * Get Subscriptions TODO this returns 500 perhaps API bug why?
+     * Get Subscriptions
      *
      * Retrieves all Subscriptions
      * @param array $query
