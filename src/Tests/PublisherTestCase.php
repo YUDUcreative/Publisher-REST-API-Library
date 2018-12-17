@@ -13,12 +13,12 @@ use GuzzleHttp\Client;
 class PublisherTestCase extends TestCase {
 
     /**
-     * Test API Key
+     * Fake API Key
      */
     const KEY = "tysH8MggNaxfMC4Sz5KheccAKvkTkKoXXPcaeKKw98658OchyEK1iCH6vTsJuhhq";
 
     /**
-     * Test API Secret
+     * Fake API Secret
      */
     const SECRET = "ts6awAsGfZ5HaDzKmxjb3v5bn2K0lWcJCcckrPwEUj2d0ILWLNtKO7NZ7dOISkYU";
 

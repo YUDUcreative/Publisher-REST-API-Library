@@ -2,9 +2,6 @@
 
 namespace Bibby\Publisher;
 
-/**
- * Publisher Response
- */
 class ResponseHandler {
 
     /**
