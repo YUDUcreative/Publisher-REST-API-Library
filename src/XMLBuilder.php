@@ -1,13 +1,13 @@
 <?php
 
-namespace Bibby\Publisher;
+namespace Yudu\Publisher;
 
 use DOMDocument;
 
 /**
  * XML Builder
  *
- * @package   bibby/publisher
+ * @package   yudu/publisher
  * @author    Andrew James Bibby
  * @license   MIT License
  * @version   0.0.1

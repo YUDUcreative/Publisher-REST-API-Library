@@ -1,7 +1,8 @@
 <?php
 
-namespace Bibby\Publisher;
+namespace Yudu\Publisher;
 
+use GuzzleHttp\Client;
 
 class RequestHandler {
 

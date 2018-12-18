@@ -1,10 +1,10 @@
 <?php
 
-namespace Bibby\Publisher\Tests;
+namespace Yudu\Publisher\Tests;
 
 use GuzzleHttp\Handler\MockHandler;
 use PHPUnit\Framework\TestCase;
-use Bibby\Publisher\Publisher;
+use Yudu\Publisher\Publisher;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;

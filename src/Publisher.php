@@ -1,12 +1,11 @@
 <?php
 
-namespace Bibby\Publisher;
+namespace Yudu\Publisher;
 
-use Bibby\Publisher\Exceptions\PublisherException;
-use Bibby\Publisher\RequestHandler;
-use Bibby\Publisher\ResponseHandler;
-use Bibby\Publisher\XMLBuilder;
-use GuzzleHttp\Client;
+use Yudu\Publisher\Exceptions\PublisherException;
+use Yudu\Publisher\RequestHandler;
+use Yudu\Publisher\ResponseHandler;
+use Yudu\Publisher\XMLBuilder;
 
 /**
  * Publisher

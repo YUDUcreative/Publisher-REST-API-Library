@@ -1,8 +1,8 @@
 <?php
 
-namespace Bibby\Publisher\Tests\Publisher;
+namespace Yudu\Publisher\Tests\Publisher;
 
-use Bibby\Publisher\Tests\PublisherTestCase;
+use Yudu\Publisher\Tests\PublisherTestCase;
 
 class PublisherTest extends PublisherTestCase
 {

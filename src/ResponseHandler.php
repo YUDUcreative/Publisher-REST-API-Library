@@ -1,6 +1,6 @@
 <?php
 
-namespace Bibby\Publisher;
+namespace Yudu\Publisher;
 
 class ResponseHandler {
 

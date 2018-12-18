@@ -1,5 +1,5 @@
 {
-    "name": "bibby/publisher",
+    "name": "yudu/publisher",
     "description": "YUDU Publisher REST API Library - PHP",
     "type": "project",
     "license" : "MIT",
@@ -19,7 +19,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Bibby\\Publisher\\": "src"
+            "Yudu\\Publisher\\": "src"
         }
     }
 }
