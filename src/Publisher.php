@@ -12,7 +12,7 @@ use Yudu\Publisher\XMLBuilder;
  *
  * A YUDU Publisher REST API Wrapper Library in PHP
  *
- * @package   bibby/publisher
+ * @package   yudu/publisher
  * @author    Andrew James Bibby
  * @license   MIT License
  * @version   0.0.1
