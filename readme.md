@@ -1,3 +1,9 @@
+[![Build Status](https://travis-ci.org/YUDUcreative/Publisher-REST-API-Library.svg?branch=master)](https://travis-ci.org/YUDUcreative/Publisher-REST-API-Library)
+[![Latest Stable Version](https://poser.pugx.org/yudu/publisher/v/stable)](https://packagist.org/packages/yudu/publisher)
+[![Total Downloads](https://poser.pugx.org/yudu/publisher/downloads)](https://packagist.org/packages/yudu/publisher)
+[![License](https://poser.pugx.org/yudu/publisher/license)](https://packagist.org/packages/yudu/publisher)
+
+
 ## YUDU Publisher REST API Wrapper Library
 
 This repository is a convenient wrapper library in PHP used to interact with the YUDU Publisher REST API. The library enables simple access to YUDU Publisher API endpoints via convenient methods. The building of requests is abstracted away to make working with the API much simpler. 
