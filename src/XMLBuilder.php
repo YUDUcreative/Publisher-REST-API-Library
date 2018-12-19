@@ -10,7 +10,6 @@ use DOMDocument;
  * @package   yudu/publisher
  * @author    Andrew James Bibby
  * @license   MIT License
- * @version   0.0.1
  * @link      https://github.com/YUDUcreative/Publisher-REST-API-Library
  *
  * This class assists in building up XML strings in the format expected when

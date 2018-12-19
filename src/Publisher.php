@@ -15,7 +15,6 @@ use Yudu\Publisher\XMLBuilder;
  * @package   yudu/publisher
  * @author    Andrew James Bibby
  * @license   MIT License
- * @version   0.0.1
  * @link      https://github.com/YUDUcreative/Publisher-REST-API-Library
  *
  * Publisher class methods are convenient and simple methods which can be used to make
