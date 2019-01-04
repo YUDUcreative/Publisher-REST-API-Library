@@ -2,9 +2,10 @@
 
 namespace Yudu\Publisher;
 
+use Yudu\Publisher\Exceptions\PublisherException;
 use GuzzleHttp\Client;
 
-class RequestHandler {
+abstract class RequestHandler {
 
     /**
      * YUDU Publisher REST API Service Url
@@ -78,7 +79,7 @@ class RequestHandler {
      * @param $client
      * @throws \Exception
      */
-    public function __construct($key, $secret, Array $options = [], \GuzzleHttp\Client $client = null)
+    protected function __construct($key, $secret, Array $options = [], \GuzzleHttp\Client $client = null)
     {
         // Set Credentials
         $this->key = $key;
@@ -100,7 +101,7 @@ class RequestHandler {
      * @return $this
      * @throws \Exception
      */
-    protected function method($method)
+    public function method($method)
     {
         if (! in_array($method, ['GET', 'POST', 'PUT', 'DELETE'])){
             throw new PublisherException('Invalid method type given - must be GET, POST, PUT, DELETE');
@@ -118,7 +119,7 @@ class RequestHandler {
      * @param string $resource
      * @return $this
      */
-    protected function resource($resource)
+    public function resource($resource)
     {
         $this->resource = ltrim($resource, '/');
         return $this;
@@ -132,7 +133,7 @@ class RequestHandler {
      * @param array $query
      * @return $this
      */
-    protected function query($query = [])
+    public function query($query = [])
     {
         foreach($query as $key => $value)
         {
@@ -149,7 +150,7 @@ class RequestHandler {
      * @param string $data
      * @return $this
      */
-    protected function data($data)
+    public function data($data)
     {
         $this->data = $data;
         return $this;

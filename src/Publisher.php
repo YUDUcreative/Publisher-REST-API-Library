@@ -2,7 +2,6 @@
 
 namespace Yudu\Publisher;
 
-use Yudu\Publisher\Exceptions\PublisherException;
 use Yudu\Publisher\RequestHandler;
 use Yudu\Publisher\ResponseHandler;
 use Yudu\Publisher\XMLBuilder;
