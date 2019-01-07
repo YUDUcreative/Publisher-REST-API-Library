@@ -64,20 +64,21 @@ class PublisherTestCase extends TestCase {
      * Mock Guzzle Client
      *
      * Creates a mocked guzzle client with history middleware
+     * Optional status, headers and body can be provided
      * All requests/responses are logged in $history
      * @return \GuzzleHttp\Client
      */
-    public function mockGuzzleClient()
+    public function mockGuzzleClient($status = 200, $headers = [], $body = '')
     {
         // Create guzzle mock handler
-        $mock = new MockHandler([ new Response(200, []) ]);
+        $mock = new MockHandler([ new Response($status, $headers, $body) ]);
 
         // Create handler stack
         $stack = HandlerStack::create($mock);
         $stack->push( Middleware::history($this->history));
 
         // Create mock guzzle client
-        return  new Client(['handler' => $stack]);
+        return new Client(['handler' => $stack, 'http_errors' => false ]);
     }
 
     /**

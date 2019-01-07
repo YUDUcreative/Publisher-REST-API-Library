@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<reader xmlns="http://schema.yudu.com" id="5678">
+    <username>example</username>
+    <emailAddress>user@example.com</emailAddress>
+    <firstName>Example</firstName>
+    <lastName>User</lastName>
+    <authorisedDeviceLimit>3</authorisedDeviceLimit>
+    <nodeId>1234</nodeId>
+    <links>
+        <link rel="http://schema.yudu.com/reader" name="self"
+              href="https://api.yudu.com/Yudu/services/2.0/readers/5678"
+              type="application/vnd.yudu+xml"/>
+        <link rel="http://schema.yudu.com/permissions" name="permissions"
+              href="https://api.yudu.com/Yudu/services/2.0/permissions?reader=5678"
+              type="application/vnd.yudu+xml"/>
+        <link rel="http://schema.yudu.com/readerLogins" name="readerLogins"
+              href="https://api.yudu.com/Yudu/services/2.0/readerLogins?reader=5678"
+              type="application/vnd.yudu+xml"/>
+        <link rel="http://schema.yudu.com/subscriptions" name="subscriptions"
+              href="https://api.yudu.com/Yudu/services/2.0/subscriptions?reader=5678"
+              type="application/vnd.yudu+xml"/>
+        <link rel="http://schema.yudu.com/authorisedDevices" name="authorisedDevices"
+              href="https://api.yudu.com/Yudu/services/2.0/readers/5678/authorisedDevices"
+              type="application/vnd.yudu+xml"/>
+        <link rel="http://schema.yudu.com/authentication" name="authentication"
+              href="https://api.yudu.com/Yudu/services/2.0/readers/5678/authentication"
+              type="application/vnd.yudu+xml"/>
+    </links>
+</reader>
