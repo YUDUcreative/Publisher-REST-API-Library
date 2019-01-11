@@ -69,7 +69,7 @@ class ResponseHandler {
      */
     public function xmlString()
     {
-        return $this->xml()->asXML();
+        return $this->xml() ? $this->xml()->asXML() : null;
     }
 
     /**
