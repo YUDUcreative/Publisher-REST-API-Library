@@ -223,10 +223,10 @@ class XMLBuilder {
      *
      * Builds expected XML for creating an SSO token
      *
-     * @param $id
+     * @param $userId
      * @return string
      */
-    public static function createToken($id)
+    public static function createToken($userId)
     {
         $dom = new DomDocument();
 
@@ -235,7 +235,7 @@ class XMLBuilder {
         $dom->appendChild($authToken);
 
         $key = $dom->createElement('key');
-        $key->appendChild($dom->createTextNode($id));
+        $key->appendChild($dom->createTextNode($userId));
         $authToken->appendChild($key);
 
         return $dom->saveXML();

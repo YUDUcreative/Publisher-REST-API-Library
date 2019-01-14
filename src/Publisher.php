@@ -93,7 +93,6 @@ class Publisher extends RequestHandler {
     public function updateReader($id, $data)
     {
         $xml = XMLBuilder::updateReader($id, $data);
-
         return $this->method('PUT')->resource('readers/' . $id)->data($xml)->make();
     }
 
@@ -342,11 +341,11 @@ class Publisher extends RequestHandler {
      * Creates Single Sign On Token
      * Token will authenticate for ANY edition
      *
-     * @param $id
+     * @param $userId
      */
-    public function createToken($id)
+    public function createToken($userId)
     {
-        $xml = XMLBuilder::createToken($id);
+        $xml = XMLBuilder::createToken($userId);
         return $this->method('POST')->resource('token')->data($xml)->make();
     }
 
@@ -356,13 +355,13 @@ class Publisher extends RequestHandler {
      * Creates Single Sign On Token
      * Token will authenticate for editions at given Publication
      *
-     * @param $id
-     * @param $publication
+     * @param $userId
+     * @param $publicationId
      */
-    public function createPublicationToken($id, $publication)
+    public function createPublicationToken($userId, $publicationId)
     {
-        $xml = XMLBuilder::createToken($id);
-        return $this->method('POST')->resource("publications/$publication/token")->data($xml)->make();
+        $xml = XMLBuilder::createToken($userId);
+        return $this->method('POST')->resource("publications/$publicationId/token")->data($xml)->make();
     }
 
     /**
@@ -371,13 +370,13 @@ class Publisher extends RequestHandler {
      * Creates Single Sign On Token
      * Token will authenticate for the edition only
      *
-     * @param $id
-     * @param $edition
+     * @param $userId
+     * @param $editionId
      */
-    public function createEditionToken($id, $edition)
+    public function createEditionToken($userId, $editionId)
     {
-        $xml = XMLBuilder::createToken($id);
-        return $this->method('POST')->resource("editions/$edition/token")->data($xml)->make();
+        $xml = XMLBuilder::createToken($userId);
+        return $this->method('POST')->resource("editions/$editionId/token")->data($xml)->make();
     }
 
     /**
