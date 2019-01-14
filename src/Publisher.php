@@ -51,7 +51,8 @@ class Publisher extends RequestHandler {
      * Get Reader
      *
      * Returns a Publisher reader
-     * @param null $id
+     *
+     * @param int $id
      */
     public function getReader($id)
     {
@@ -62,6 +63,7 @@ class Publisher extends RequestHandler {
      * Get Readers
      *
      * Returns a list of readers
+     *
      * @param array $query
      */
     public function getReaders($query = [])
@@ -74,7 +76,7 @@ class Publisher extends RequestHandler {
      *
      * Creates a new Publisher Reader
      *
-     * @param $data
+     * @param array $data
      */
     public function createReader($data)
     {
@@ -87,8 +89,8 @@ class Publisher extends RequestHandler {
      *
      * Updates a Publisher Reader
      *
-     * @param $id
-     * @param $data
+     * @param int $id
+     * @param array $data
      */
     public function updateReader($id, $data)
     {
@@ -101,7 +103,7 @@ class Publisher extends RequestHandler {
      *
      * Deletes a Publisher Reader
      *
-     * @param $id
+     * @param int $id
      */
     public function deleteReader($id)
     {
@@ -112,6 +114,7 @@ class Publisher extends RequestHandler {
      * Get Editions
      *
      * Returns a list of editions
+     *
      * @param array $query
      */
     public function getEditions($query = [])
@@ -123,7 +126,8 @@ class Publisher extends RequestHandler {
      * Get Edition
      *
      * Returns a specific edition
-     * @param $id
+     *
+     * @param int $id
      */
     public function getEdition($id)
     {
@@ -134,6 +138,7 @@ class Publisher extends RequestHandler {
      * Get Permissions
      *
      * Lists edition permissions by reader
+     *
      * @param array $query
      */
     public function getPermissions($query = [])
@@ -145,7 +150,8 @@ class Publisher extends RequestHandler {
      * Get Permission
      *
      * Retrieves a specific permission
-     * @param $id
+     *
+     * @param int $id
      */
     public function getPermission($id)
     {
@@ -168,8 +174,10 @@ class Publisher extends RequestHandler {
     /**
      * Update Permission
      *
-     * @param $id
-     * @param $data
+     * Updates a readers permission
+     *
+     * @param int $id
+     * @param array $data
      */
     public function updatePermission($id, $data)
     {
@@ -182,7 +190,7 @@ class Publisher extends RequestHandler {
      *
      * Deletes permission for a reader
      *
-     * @param $data
+     * @param array $data
      */
     public function deletePermission($id)
     {
@@ -193,6 +201,7 @@ class Publisher extends RequestHandler {
      * Get Reader Logins
      *
      * Retreives all reader logins
+     *
      * @param array $query
      */
     public function getReaderLogins($query = [])
@@ -204,7 +213,8 @@ class Publisher extends RequestHandler {
      * Get Reader Login
      *
      * Retreives a reader login
-     * @param $id
+     *
+     * @param int $id
      */
     public function getReaderLogin($id)
     {
@@ -215,6 +225,7 @@ class Publisher extends RequestHandler {
      * Get Publications
      *
      * Retreives list of Publications
+     *
      * @param array $query
      */
     public function getPublications($query = [])
@@ -226,7 +237,8 @@ class Publisher extends RequestHandler {
      * Get Publication
      *
      * Retreives a single Publication
-     * @param $id
+     *
+     * @param int $id
      */
     public function getPublication($id)
     {
@@ -237,6 +249,7 @@ class Publisher extends RequestHandler {
      * Get Subscriptions
      *
      * Retrieves all Subscriptions
+     *
      * @param array $query
      */
     public function getSubscriptions($query = [])
@@ -248,7 +261,8 @@ class Publisher extends RequestHandler {
      * Get Subscription
      *
      * Retrieves a single Subscription
-     * $id
+     *
+     * @param int $id
      */
     public function getSubscription($id)
     {
@@ -259,6 +273,8 @@ class Publisher extends RequestHandler {
      * Get Subscription Periods
      *
      * Retrieves all subscription periods
+     *
+     * @param array $query
      */
     public function getSubscriptionPeriods($query = [])
     {
@@ -269,6 +285,8 @@ class Publisher extends RequestHandler {
      * Get Subscription Period
      *
      * Retrieves a single subscription period
+     *
+     * @param int $id
      */
     public function getSubscriptionPeriod($id)
     {
@@ -279,6 +297,8 @@ class Publisher extends RequestHandler {
      * Create Subscription Period
      *
      * Creates a new subscription period
+     *
+     * @param array $query
      */
     public function createSubscriptionPeriod($data)
     {
@@ -290,6 +310,9 @@ class Publisher extends RequestHandler {
      * Update Subscription Period
      *
      * Updates a specified subscription period
+     *
+     *  @param int $id
+     *  @param array $query
      */
     public function updateSubscriptionPeriod($id, $data)
     {
@@ -302,7 +325,7 @@ class Publisher extends RequestHandler {
      *
      * Deletes a readers Subscription Period
      *
-     * @param $id
+     * @param int $id
      */
     public function deleteSubscriptionPeriod($id)
     {
@@ -314,7 +337,7 @@ class Publisher extends RequestHandler {
      *
      * Removes all authorised devices for a user
      *
-     * @param $id
+     * @param int $id
      */
     public function removeDevices($id)
     {
@@ -326,8 +349,8 @@ class Publisher extends RequestHandler {
      *
      * Authenticates a reader's password
      *
-     * @param $id
-     * @param $password
+     * @param int $id
+     * @param string $password
      */
     public function authenticatePassword($id, $password)
     {
@@ -341,7 +364,7 @@ class Publisher extends RequestHandler {
      * Creates Single Sign On Token
      * Token will authenticate for ANY edition
      *
-     * @param $userId
+     * @param string $userId
      */
     public function createToken($userId)
     {
@@ -355,8 +378,8 @@ class Publisher extends RequestHandler {
      * Creates Single Sign On Token
      * Token will authenticate for editions at given Publication
      *
-     * @param $userId
-     * @param $publicationId
+     * @param string $userId
+     * @param int $publicationId
      */
     public function createPublicationToken($userId, $publicationId)
     {
@@ -370,8 +393,8 @@ class Publisher extends RequestHandler {
      * Creates Single Sign On Token
      * Token will authenticate for the edition only
      *
-     * @param $userId
-     * @param $editionId
+     * @param string $userId
+     * @param int $editionId
      */
     public function createEditionToken($userId, $editionId)
     {
@@ -386,10 +409,11 @@ class Publisher extends RequestHandler {
      * Send Custom Notifications permission is required in
      * order to send targeted notifications.
      *
-     * @param $nodeId
-     * @param $title
-     * @param $message
-     * @param $subscribers
+     * @param int $nodeId
+     * @param string $title
+     * @param string $message
+     * @param array $subscribers
+     * @param array $thirdPartySubscribers
      */
     public function sendTargetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers)
     {

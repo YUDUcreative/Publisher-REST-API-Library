@@ -170,6 +170,7 @@ abstract class RequestHandler {
      * Create Signature
      *
      * Creates a base-64 encoded HMAC-SHA256 hash signature
+     *
      * @return string
      */
     private function createSignature()
