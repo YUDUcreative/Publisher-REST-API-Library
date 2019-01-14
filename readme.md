@@ -21,7 +21,7 @@ This library can simply be installed with composer via packagist by using:
 
 If unfamiliar with composer more information can be found [here](https://getcomposer.org/)
 
-### How to get started?
+## How to get started?
 
 To use this library you will need an active YUDU Publisher Key and Secret. The Key and Secret are required to create a Publisher client. Once instantiated the Publisher client can be used for multiple requests. The results can be transformed as required. Below demonstrates how the publisher client can be created and used.
 
@@ -56,17 +56,22 @@ To use this library you will need an active YUDU Publisher Key and Secret. The K
 
 ## Available methods and examples 
 
-### Get all readers
+#### Get Links
 ```
-$results = $publisher->getReaders();
+$publisher->getLinks();
 ```
-### Get reader
+
+#### Get all readers
 ```
-$results = $publisher->getReader(123456);
+$publisher->getReaders();
 ```
-### Create reader
+#### Get reader
 ```
-$results = $publisher->createReader([
+$publisher->getReader(123456);
+```
+#### Create reader
+```
+$publisher->createReader([
     "username"      => "example",
     "emailAddress"  => "example@example.com",
     "firstName"     => "Micky",
@@ -75,9 +80,9 @@ $results = $publisher->createReader([
     "nodeId"        => "347358",
 ]);
 ```
-### Update reader
+#### Update reader
 ```
-$results = $publisher->updateReader(12464367,[
+$publisher->updateReader(12464367,[
     "username"       => "updated",
     "emailAddress"   => "updated@example.com",
     "firstName"      => "Joe",
@@ -86,12 +91,130 @@ $results = $publisher->updateReader(12464367,[
     "nodeId"         => "347358",
 ]);
 ```
-### Delete reader
+#### Delete reader
 ```
-$results = $publisher->deleteReader(123456);
+$publisher->deleteReader(123456);
+```
+#### Get Editions
+```
+$publisher->getEditions();
+```
+#### Get Edition
+```
+$publisher->getEdition(12345);
+```
+#### Get Permissions
+```
+$publisher->getPermissions();
+```
+#### Get Permission
+```
+$publisher->getPermission(16346);
+```
+#### Create Permission
+```
+$publisher->createPermission([
+    'reader' => 2356346,
+    'edition'=> 6795595,
+]);
+```
+#### Update Permission
+```
+$publisher->updatePermission( 132365, [
+    'expiryDate' => 2356346,
+]);
+```
+#### Delete Permission
+```
+$publisher->deletePermission(1443904)
+```
+#### Get Reader Logins
+``` 
+$publisher->getReaderLogins();
+```
+#### Get reader Login
+``` 
+$publisher->getReaderLogin(12345);
+```
+#### Get Publications
+```
+$publisher->getPublications();
+```
+#### Get Publication
+```
+$publisher->getPublication(6821658);
+```
+#### Get Subscriptions
+```
+$publisher->getSubscriptions();
+```
+#### Get Subscription
+```
+$publisher->getSubscription(45678656);
+```
+#### Get Subscription Periods
+``` 
+$publisher->getSubscriptionPeriods();
+```
+#### Get Subscription Period
+```
+$publisher->getSubscriptionPeriod(968518080);
+```
+#### Create Subscription Period
+```
+$publisher->createSubscriptionPeriod([
+    'reader'       => 126417872,
+    'subscription' => 6482745,
+    'startDate'    => '2019-01-11T00:00:00Z',
+    'endDate'      => '2020-01-11T00:00:00Z',
+]);
+```
+#### Update Subscription Period
+```
+$publisher->updateSubscriptionPeriod(2351346 [
+    'startDate'    => '2020-01-11T00:00:00Z',
+    'endDate'      => '2021-01-11T00:00:00Z',
+]);
+```
+#### Delete Subscription Period
+```
+$publisher->deleteSubscriptionPeriod(2351346);
+```
+#### Remove Devices
+```
+$publisher->removeDevices(6134634);
+```
+#### Authenticate Password
+```
+$publisher->authenticatePassword(2363465,'j@Cks50n');
+```
+#### Create Token (Access to any edition)
+```
+$publisher->createToken('admin@example.com');
+```
+#### Create Publication Token (Access editions at publication) 
+```
+$publisher->createPublicationToken('admin@exmaple.com', 1246457);
+```
+#### Create Edition Token (Access single edition only)
+```
+$publisher->createEditionToken('admin@exmaple.com', 74244556);
+```
+#### Send Targeted Notification
+```
+$publisher->sendTargetedNotification(7145646, 'title', 'message', ['admin@example.com'], [ 356h64gqh65h545vhj6, 4574655w5ujw65w5a5]);
+```
+## Custom Request
+
+In addition to using the methods above, it may be desirable to build the request manually. If this is the case the underlying request methods are exposed and chainable so that any request can be made. It doesnt matter what order the chained methods are added so long as the make() method is that last method to be called. 
+
+For example:
+
+```
+$results = $publisher->method("GET")->resource("readers")->make();
 ```
 
-### Handling responses
+## Handling responses
 
 After making a call to Publisher a ResponseHandler object is returned. The Responsehandler is a wrapped Guzzle response which reveals convenient methods to assist in transforming the response into a chosen format.
 
@@ -120,8 +243,10 @@ Below demonstrates the methods that can be used after making a request:
     
 ```
 
-### Issues / Support
+## Issues / Support
 
 General support issues can be directed to [support@yudu.com](support@yudu.com)
+
+When requesting support it will be helpful if you can provide the raw requests and responses for any api call you are attempting. This can be obtained by passing ``` [ 'debug' => true ] ``` in the options array when instantiating the publisher library.
 
 If you encounter a bug or have a technical question please open an issue on this repository.
