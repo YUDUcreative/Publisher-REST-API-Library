@@ -2,7 +2,6 @@
 
 namespace Yudu\Publisher;
 
-use http\Exception\InvalidArgumentException;
 use Yudu\Publisher\Exceptions\PublisherException;
 use GuzzleHttp\Client;
 
@@ -78,7 +77,6 @@ class RequestHandler {
      * @param $secret
      * @param $options
      * @param $client
-     * @throws \Exception
      */
     protected function __construct($key, $secret, Array $options = [], \GuzzleHttp\Client $client = null)
     {
