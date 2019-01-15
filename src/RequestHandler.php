@@ -2,6 +2,7 @@
 
 namespace Yudu\Publisher;
 
+use http\Exception\InvalidArgumentException;
 use Yudu\Publisher\Exceptions\PublisherException;
 use GuzzleHttp\Client;
 
@@ -81,15 +82,44 @@ abstract class RequestHandler {
      */
     protected function __construct($key, $secret, Array $options = [], \GuzzleHttp\Client $client = null)
     {
-        // Set Credentials
-        $this->key = $key;
-        $this->secret = $secret;
-
-        // Set options
-        $this->options = $options;
+        // Set credentials and options
+        $this->setCredentials($key, $secret);
+        $this->setOptions($options);
 
         // Set HTTP Client
         $this->client = $client ? $client : new Client();
+    }
+
+    /**
+     * Set Credentials
+     *
+     * @param string $key
+     * @param string $secret
+     */
+    private function setCredentials($key = null, $secret = null)
+    {
+        if(!$key || !$secret){
+            throw new \InvalidArgumentException('Publisher Key AND Publisher Secret must be specified.');
+        }
+        $this->key = $key;
+        $this->secret = $secret;
+    }
+
+    /**
+     * Set options
+     *
+     * Validates and sets the request options
+     *
+     * @param $options
+     */
+    private function setOptions($options)
+    {
+        foreach($options as $key => $value){
+            if(!in_array($key, [ "timestamp", "verify", "debug" ])){
+                throw new \InvalidArgumentException("$key is not a valid option parameter.");
+            }
+        }
+        $this->options = $options;
     }
 
     /**
@@ -104,7 +134,7 @@ abstract class RequestHandler {
     public function method($method)
     {
         if (! in_array($method, ['GET', 'POST', 'PUT', 'DELETE'])){
-            throw new PublisherException('Invalid method type given - must be GET, POST, PUT, DELETE');
+            throw new \InvalidArgumentException('Invalid method type given - must be GET, POST, PUT, DELETE');
         }
 
         $this->method = $method;
