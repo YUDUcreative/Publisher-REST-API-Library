@@ -6,7 +6,7 @@ use http\Exception\InvalidArgumentException;
 use Yudu\Publisher\Exceptions\PublisherException;
 use GuzzleHttp\Client;
 
-abstract class RequestHandler {
+class RequestHandler {
 
     /**
      * YUDU Publisher REST API Service Url
