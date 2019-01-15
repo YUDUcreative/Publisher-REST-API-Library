@@ -3,6 +3,7 @@
     <nodeId>1234</nodeId>
     <message>Hello World!</message>
     <title>Targeted Notification</title>
+    <title>DEFAULT</title>
     <subscribers>
         <subscriberUsername>billy123</subscriberUsername>
         <subscriberUsername>unclebob69</subscriberUsername>

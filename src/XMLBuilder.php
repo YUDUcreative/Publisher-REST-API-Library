@@ -253,7 +253,7 @@ class XMLBuilder {
      * @param array $subscribers
      * @return string
      */
-    public static function targetedNotification($nodeId, $title, $message, $subscribers = [], $thirdPartySubscribers = [])
+    public static function targetedNotification($nodeId, $title, $message, $subscribers = [], $thirdPartySubscribers = [], $priority = "DEFAULT")
     {
         $dom = new DomDocument();
 
@@ -272,6 +272,10 @@ class XMLBuilder {
         $_title = $dom->createElement('title');
         $_title->appendChild($dom->createTextNode($title));
         $targetedNotification->appendChild($_title);
+
+        $_priority = $dom->createElement('notificationPriority');
+        $_priority->appendChild($dom->createTextNode($priority));
+        $targetedNotification->appendChild($_priority);
 
         $_subscribers = $dom->createElement('subscribers');
 

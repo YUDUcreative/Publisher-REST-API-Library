@@ -525,15 +525,16 @@ class PublisherTest extends PublisherTestCase
         $nodeId = '1234';
         $title = 'Targeted Notification';
         $message = 'Hello World!';
+        $priority = 'DEFAULT';
         $subscribers = ['billy123', 'unclebob69', 'Mjaxson'];
         $thirdPartySubscribers = ['cnfvwh4p93jcllljfd', 'g5q456uyhb565hta5br', 'vb49ierd39jgvr939kkjd'];
 
-        $this->publisher->sendTargetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers);
+        $this->publisher->sendTargetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers, $priority);
 
         $expected = [
             'method'    => 'POST',
             'uri'       => 'targetedNotifications',
-            'signature' => 'ZGYWNSvwrsmEUyhtQXD4FoaLjNG8e7h6fkxV1a2JpNY=',
+            'signature' => 'ylP6jsfO9zJP+JQTxE51LBFfk/RZx+18vNLR0QpEq28=',
             'body'      => $this->loadXML('sendTargetedNotification')
         ];
 
