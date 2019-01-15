@@ -202,7 +202,7 @@ $publisher->createEditionToken('admin@exmaple.com', 74244556);
 ```
 #### Send Targeted Notification
 ```
-$publisher->sendTargetedNotification(7145646, 'title', 'message', ['admin@example.com'], [ 356h64gqh65h545vhj6, 4574655w5ujw65w5a5]);
+$publisher->sendTargetedNotification(7145646, 'title', 'message', ['admin@example.com'], [ 356h64gqh65h545vhj6, 4574655w5ujw65w5a5], 'HIGH');
 ```
 ## Custom Request
 
