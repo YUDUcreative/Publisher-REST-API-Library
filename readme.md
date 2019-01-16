@@ -1,4 +1,4 @@
-## YUDU Publisher REST API Wrapper Library
+## YUDU Publisher REST API Wrapper Library 1.0.0
 
 [![Build Status](https://travis-ci.org/YUDUcreative/Publisher-REST-API-Library.svg?branch=master)](https://travis-ci.org/YUDUcreative/Publisher-REST-API-Library)
 [![Latest Stable Version](https://poser.pugx.org/yudu/publisher/v/stable)](https://packagist.org/packages/yudu/publisher)
