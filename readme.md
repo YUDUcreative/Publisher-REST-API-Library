@@ -28,28 +28,28 @@ To use this library you will need an active YUDU Publisher Key and Secret. The K
 ```
 <?php
     
-    require 'vendor/autoload.php';
-    
-    use Yudu\Publisher\Publisher;
-    
-    // YUDU Publisher Credentials
-    $key = 'your-key-here';
-    $secret = 'your-secret-here';
-    
-    // Optional
-    $options = [
-        'debug' => false,    // raw requests/response returned for debugging
-        'verify' => true,    // toggle SSL verification 
-    ];
-    
-    // Create Publisher Client
-    $publisher = new Publisher($key, $secret, $options);  
-    
-    // Makes request for readers
-    $results = $publisher->getReaders();
-    
-    // Print the result object (see responses section for how to manage responses) 
-    print_r($results);
+require 'vendor/autoload.php';
+
+use Yudu\Publisher\Publisher;
+
+// YUDU Publisher Credentials
+$key = 'your-key-here';
+$secret = 'your-secret-here';
+
+// Optional
+$options = [
+	'debug' => false,    // raw requests/response returned for debugging
+	'verify' => true,    // toggle SSL verification 
+];
+
+// Create Publisher Client
+$publisher = new Publisher($key, $secret, $options);  
+
+// Makes request for readers
+$results = $publisher->getReaders();
+
+// Print the result object (see responses section for how to manage responses) 
+print_r($results);
     
 ?>
 ```
@@ -222,24 +222,24 @@ Below demonstrates the methods that can be used after making a request:
 
 ```
 
-    // Makes request for readers ($results is a ResponseHandler Object)
-    $results = $publisher->getReaders();
-        
-    // Get the request HTTP status code e.g 200
-    $status = $results->statusCode();   
-    
-    // Convert results to Simple XML Object 
-    $xml_object = $results->xml 
-    
-    // Convert results to XML string
-    $xml_string = $results->xmlString();
-    
-    // Return the raw guzzle object
-    $guzzle = $results->guzzle();
-    
-    // Casts results to string 
-    header("Content-type: text/xml");
-    echo $results; 
+// Makes request for readers ($results is a ResponseHandler Object)
+$results = $publisher->getReaders();
+	
+// Get the request HTTP status code e.g 200
+$status = $results->statusCode();   
+
+// Convert results to Simple XML Object 
+$xml_object = $results->xml 
+
+// Convert results to XML string
+$xml_string = $results->xmlString();
+
+// Return the raw guzzle object
+$guzzle = $results->guzzle();
+
+// Casts results to string 
+header("Content-type: text/xml");
+echo $results; 
     
 ```
 

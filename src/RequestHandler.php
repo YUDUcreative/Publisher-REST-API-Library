@@ -258,7 +258,7 @@ class RequestHandler {
      * Makes an HTTP request to the YUDU Publisher API
      *
      * @return $this
-     * @throws \Bibby\Publisher\Exceptions\PublisherException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function make()
