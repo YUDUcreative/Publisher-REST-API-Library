@@ -224,7 +224,7 @@ Below demonstrates the methods that can be used after making a request:
 
 // Makes request for readers ($results is a ResponseHandler Object)
 $results = $publisher->getReaders();
-	
+
 // Get the request HTTP status code e.g 200
 $status = $results->statusCode();   
 
@@ -237,10 +237,12 @@ $xml_string = $results->xmlString();
 // Return the raw guzzle object
 $guzzle = $results->guzzle();
 
-// Casts results to string 
+// Return raw http request/response string
+$raw = $results->raw();
+
+// Echo Casts results to string 
 header("Content-type: text/xml");
 echo $results; 
-    
 ```
 
 ## Issues / Support

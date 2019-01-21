@@ -267,6 +267,9 @@ class RequestHandler {
             // Unless overriden ensure current timestamp is set
             $this->query['timestamp'] = $this->options['timestamp'] ?? time();
 
+            // Begin output buffering
+            ob_start();
+
             // Request made to YUDU Publisher
             $response = $this->client->request($this->method, $this->createRequestUrl(), [
                 'debug'   => $this->options['debug'] ?? false,
@@ -279,6 +282,9 @@ class RequestHandler {
                 'http_errors' => false,
                 'body'        => $this->data
             ]);
+
+            // Obtain raw request/response from output buffer when in debug mode only
+            $raw = ob_get_clean();
         }
         catch(\Exception $e) {
             throw new PublisherException($e);
@@ -286,7 +292,7 @@ class RequestHandler {
             $this->reset();
         }
 
-        return new ResponseHandler($response);
+        return new ResponseHandler($response, $raw);
     }
 }
 
