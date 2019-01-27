@@ -283,16 +283,25 @@ class RequestHandler {
                 'body'        => $this->data
             ]);
 
-            // Obtain raw request/response from output buffer when in debug mode only
+            // Obtain raw request/response headers from output buffer
             $raw = ob_get_clean();
+
+            // Grab raw request data
+            $request = [
+                'method'    => $this->method,
+                'resource'  => $this->resource,
+                'query'     => $this->query,
+                'data'      => $this->data,
+                'raw'       => $raw,
+            ];
+
+            return new ResponseHandler($response, $request);
         }
         catch(\Exception $e) {
             throw new PublisherException($e);
         } finally {
             $this->reset();
         }
-
-        return new ResponseHandler($response, $raw);
     }
 }
 

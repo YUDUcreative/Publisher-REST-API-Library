@@ -23,11 +23,11 @@ class ResponseHandler {
     private $response;
 
     /**
-     * Raw request/response
+     * Request
      *
-     * @var null|string
+     * @var array
      */
-    private $raw;
+    private $request;
 
     /**
      * ResponseHandler constructor
@@ -35,10 +35,20 @@ class ResponseHandler {
      * @param \GuzzleHttp\Psr7\Response $response
      * @param null|string $raw
      */
-    public function __construct(\GuzzleHttp\Psr7\Response $response, string $raw = null)
+    public function __construct(\GuzzleHttp\Psr7\Response $response, array $request = [])
     {
         $this->response = $response;
-        $this->raw = $raw;
+        $this->request = $request;
+    }
+
+    /**
+     * Request Data
+     *
+     * @return array
+     */
+    public function request()
+    {
+        return $this->request;
     }
 
     /**
@@ -48,7 +58,7 @@ class ResponseHandler {
      */
     public function raw()
     {
-        return $this->raw;
+        return $this->request->raw ?? null;
     }
 
     /**
