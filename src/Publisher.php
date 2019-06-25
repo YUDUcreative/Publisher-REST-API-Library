@@ -416,9 +416,9 @@ class Publisher extends RequestHandler {
      * @param array $thirdPartySubscribers
      * @param string $priority
      */
-    public function sendTargetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers, $priority)
+    public function sendTargetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers, $priority, $disableSound)
     {
-        $xml = XMLBuilder::targetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers, $priority);
+        $xml = XMLBuilder::targetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers, $priority, $disableSound);
         return $this->method('POST')->resource('targetedNotifications')->data($xml)->make();
     }
 
