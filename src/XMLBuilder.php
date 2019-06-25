@@ -251,9 +251,11 @@ class XMLBuilder {
      * @param $message
      * @param array $thirdPartySubscribers
      * @param array $subscribers
+     * @param string $priority
+     * @param string $disableSound
      * @return string
      */
-    public static function targetedNotification($nodeId, $title, $message, $subscribers = [], $thirdPartySubscribers = [], $priority = "DEFAULT")
+    public static function targetedNotification($nodeId, $title, $message, $subscribers = [], $thirdPartySubscribers = [], $priority = "DEFAULT", $disableSound = "false")
     {
         $dom = new DomDocument();
 
@@ -276,6 +278,10 @@ class XMLBuilder {
         $_priority = $dom->createElement('notificationPriority');
         $_priority->appendChild($dom->createTextNode($priority));
         $targetedNotification->appendChild($_priority);
+
+        $_disableSound = $dom->createElement('disableSound');
+        $_disableSound->appendChild($dom->createTextNode($disableSound));
+        $targetedNotification->appendChild($_disableSound);
 
         $_subscribers = $dom->createElement('subscribers');
 
