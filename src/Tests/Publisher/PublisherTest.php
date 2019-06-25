@@ -8,7 +8,8 @@ class PublisherTest extends PublisherTestCase
 {
     private $publisher;
 
-    public function setUp(){
+    public function setUp() : void
+    {
         $this->publisher = $this->buildPublisherClient();
     }
 
