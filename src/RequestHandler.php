@@ -12,7 +12,7 @@ class RequestHandler {
      *
      * @var string
      */
-    const SERVICE_URL = 'https://api.yudu.com/Yudu/services/2.0/';
+    const SERVICE_URL = 'https://api.yudu.com/Yudu/services/2.1/';
 
     /**
      * YUDU Publisher REST API Key
@@ -215,7 +215,7 @@ class RequestHandler {
      */
     private function stringToSign()
     {
-        return $this->method . '/Yudu/services/2.0/' . $this->resource . '?' .  $this->createQueryString() . $this->data;
+        return $this->method . '/Yudu/services/2.1/' . $this->resource . '?' .  $this->createQueryString() . $this->data;
     }
 
     /**
