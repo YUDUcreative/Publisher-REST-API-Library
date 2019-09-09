@@ -422,6 +422,121 @@ class Publisher extends RequestHandler {
         return $this->method('POST')->resource('targetedNotifications')->data($xml)->make();
     }
 
+    /**
+     * Get Categories
+     *
+     * Returns Publisher Categories List
+     *
+     * @param array $query
+     *
+     */
+    public function getCategories($query = [])
+    {
+        return $this->method('GET')->resource("categories")->query($query)->make();
+    }
+
+    /**
+     * Create Category
+     *
+     * Creates a Publisher Category
+     *
+     * @param array $data
+     */
+    public function createCategory($data)
+    {
+        $xml = XMLBuilder::createCategory($data);
+        return $this->method('POST')->resource('categories')->data($xml)->make();
+    }
+
+    /**
+     * Delete Categories
+     *
+     * Removes ALL Categories at a specific publication node
+     *
+     * @param int $publicationNode
+     */
+    public function deleteCategories($publicationNode)
+    {
+        return $this->method('DELETE')->resource("categories")->query(['publicationNodeId' => $publicationNode])->make();
+    }
+
+    /**
+     * Get Category
+     *
+     * Returns specific category by category code
+     *
+     * @param string $code
+     */
+    public function getCategory($code)
+    {
+        return $this->method('GET')->resource("categories/$code")->make();
+    }
+
+    /**
+     * Update Category
+     *
+     * Updates a specific category at a specific publication node
+     *
+     * @param string $code
+     * @param int $publicationNode
+     * @param array $data
+     */
+    public function updateCategory($code, $publicationNode, $data)
+    {
+        $xml = XMLBuilder::createCategory($data);
+        return $this->method('PUT')->resource("categories/$code")->data($xml)->query(['publicationNodeId' => $publicationNode])->make();
+    }
+
+    /**
+     * Delete Category
+     *
+     * Removes a category at a specific publication node
+     *
+     * @param string $code
+     * @param int $publicationNode
+     */
+    public function deleteCategory($code, $publicationNode)
+    {
+        return $this->method('DELETE')->resource("categories/$code")->query(['publicationNodeId' => $publicationNode])->make();
+    }
+
+    /**
+     * Get Category Editions
+     *
+     * Returns list of category editions
+     *
+     */
+    public function getCategoryEditions($query = [])
+    {
+        return $this->method('GET')->resource("categoryEditions")->query($query)->make();
+    }
+
+    /**
+     * Create Category Edition
+     *
+     * Creates a Publisher Category Edition
+     *
+     * @param array $data
+     */
+    public function createCategoryEdition($data)
+    {
+        $xml = XMLBuilder::createCategoryEdition($data);
+        return $this->method('POST')->resource('categoryEditions')->data($xml)->make();
+    }
+
+    /**
+     * Delete Category Edition
+     *
+     * Removes a category edition
+     *
+     * @param string $code
+     * @param int $publicationNode
+     */
+    public function deleteCategoryEdition($query = [])
+    {
+        return $this->method('DELETE')->resource("categoryEditions")->query($query)->make();
+    }
+
 }
 
 

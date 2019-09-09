@@ -303,6 +303,59 @@ class XMLBuilder {
 
         return $dom->saveXML();
     }
+
+    /**
+     * Create Category
+     *
+     * Builds expected XML for creating a category
+     *
+     * @param $data
+     * @return string
+     */
+    public static function createCategory($data)
+    {
+        $dom = new DomDocument();
+
+        $category = $dom->createElementNS('http://schema.yudu.com', "category");
+
+        $dom->appendChild($category);
+
+        foreach($data as $key => $value)
+        {
+            $element = $dom->createElement($key);
+            $element->appendChild($dom->createTextNode($value));
+            $category->appendChild($element);
+        }
+
+        return $dom->saveXML();
+    }
+
+    /**
+     * Create Category Edition
+     *
+     * Builds expected XML for creating a categoryEdition
+     *
+     * @param $data
+     * @return string
+     */
+    public static function createCategoryEdition($data)
+    {
+        $dom = new DomDocument();
+
+        $categoryEdition = $dom->createElementNS('http://schema.yudu.com', "categoryEdition");
+
+        $dom->appendChild($categoryEdition);
+
+        foreach($data as $key => $value)
+        {
+            $element = $dom->createElement($key);
+            $element->appendChild($dom->createTextNode($value));
+            $categoryEdition->appendChild($element);
+        }
+
+        return $dom->saveXML();
+    }
+
 }
 
 

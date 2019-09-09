@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<categoryEdition xmlns="http://schema.yudu.com" limit="100" offset="0" total="2" truncated="false">
+    <code>CATEGORY_EXAMPLE</code>
+    <editionId>72</editionId>
+    <publicationNodeId>58</publicationNodeId>
+</categoryEdition>
+

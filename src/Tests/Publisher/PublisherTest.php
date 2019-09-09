@@ -8,7 +8,7 @@ class PublisherTest extends PublisherTestCase
 {
     private $publisher;
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->publisher = $this->buildPublisherClient();
     }
@@ -23,7 +23,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => '',
-            'signature' => '2M9n4MDsZrPgC6fQLicOui1uh2+s9KEJ+UdhP2m782A=',
+            'signature' => 'JHpf0clSlU4Heg//Lo4TxlXyyWxAYMmaMSIgr3oE84A=',
         ];
 
         $this->confirmRequest($expected);
@@ -39,7 +39,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'readers',
-            'signature' => 'kRvwEd8CsJUjPWCwAPInZAT4MJCC60edG+RE4G6RsH0=',
+            'signature' => 'E9RAVo/ZpgqeId+XJ5NiXW3j3CSxM8F6jdQvMM3RsvY=',
             'body'      => '',
         ];
 
@@ -56,7 +56,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'readers/12345',
-            'signature' => 'Sn1RDyoLl62ASRYN9v3vYWMv3HQCzDu+mA5oHzAjYxE=',
+            'signature' => 'WIMdjcVsHzD2WkZ9MPEMcQInDoU9yWWmpPu7XBlxppU=',
         ];
 
         $this->confirmRequest($expected);
@@ -80,8 +80,8 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'POST',
             'uri'       => 'readers',
-            'signature' => 'lYeAFXCt/ZT83YZja1vFm6FhDwquz1nBp5bMyLo5oag=',
-            'body'      => $this->loadXML('createReader')
+            'signature' => '98VRZgeRqwx/g8YeK++QfPBWlY9HCB+nc1AEyIscoBM=',
+            'body'      => $this->loadXML('createReader'),
         ];
 
         $this->confirmRequest($expected);
@@ -105,8 +105,8 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'PUT',
             'uri'       => 'readers/1',
-            'signature' => 'u47FPdtbDPprcVqUbjj3gz4P5rNV9jB7ssv1IsC/jqo=',
-            'body'      => $this->loadXML('updateReader')
+            'signature' => 'KcABo3a6BaGPYTcNpnPcyrQ7gmKMUSIb10J8a8/Wo5E=',
+            'body'      => $this->loadXML('updateReader'),
         ];
 
         $this->confirmRequest($expected);
@@ -122,7 +122,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'DELETE',
             'uri'       => 'readers/1',
-            'signature' => 'x1WjCyYSge49467gSnmk+CWErm9rlxqZvEL/Ajix38c=',
+            'signature' => 'ODYi5mImQDGD61cjN/lKiyiomZRx5Wo8Te8eN+7LrfA=',
         ];
 
         $this->confirmRequest($expected);
@@ -138,7 +138,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'editions',
-            'signature' => '14ZG7lAWtF4Iu4/Z05NWSgOa4QHUYuK6lXiWXQFhY9s=',
+            'signature' => 't8xILJtCtW4RGy+hNp6Pjy1jbWrshhWN28zuExUQu8w=',
             'body'      => '',
         ];
 
@@ -155,7 +155,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'editions/12345',
-            'signature' => 'czuditXGyeKPy5UzMxbgZoBtfIZE5f60tLAi5tzmor8=',
+            'signature' => '6QtFJck8+byTceqhXlvTzvYYD5h7zrBTZ9k8HMJAeck=',
         ];
 
         $this->confirmRequest($expected);
@@ -171,7 +171,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'permissions',
-            'signature' => 'KvVslm9cRgbg5PUtQLhWIYPsL2yjriropTOJeHAN7tY=',
+            'signature' => '4ngfkUuCgAYQtqkpKW6g09W0G2zpxHdNQO3f2jTFd/4=',
         ];
 
         $this->confirmRequest($expected);
@@ -187,7 +187,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'permissions/12345',
-            'signature' => 'otycvX+A6in4WG7PHLyOkGvt7YWs1frjQlKC3x/MMsI=',
+            'signature' => 'yf3o6CBdUcusZTiX71rTcTNzS7EtRRLlnVD2/Oa1hCg=',
         ];
 
         $this->confirmRequest($expected);
@@ -206,8 +206,8 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'POST',
             'uri'       => 'permissions',
-            'signature' => 'nE7x3V1CZiVNdZLG2lmi3Ey2pQ/4hkGlC48opFFdyuc=',
-            'body'      => $this->loadXML('createPermission')
+            'signature' => '3LGXWt0l4OmT5mTLyk5QLADiRmhSIlTW0ljpANnRALE=',
+            'body'      => $this->loadXML('createPermission'),
         ];
 
         $this->confirmRequest($expected);
@@ -219,14 +219,14 @@ class PublisherTest extends PublisherTestCase
     public function testUpdatePermission()
     {
         $this->publisher->updatePermission(1, [
-            'expiryDate'  => '2015-06-01T00:00:00Z',
+            'expiryDate' => '2015-06-01T00:00:00Z',
         ]);
 
         $expected = [
             'method'    => 'PUT',
             'uri'       => 'permissions/1',
-            'signature' => '1+w+LWvnjvI8TCRNV7VSqIcuFEldxShbMys87TmSV1k=',
-            'body'      => $this->loadXML('updatePermission')
+            'signature' => 'JoNTy8MhAtMclcHxonRiS8x3AAbBuYHbkCQHORF0dAk=',
+            'body'      => $this->loadXML('updatePermission'),
         ];
 
         $this->confirmRequest($expected);
@@ -242,7 +242,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'DELETE',
             'uri'       => 'permissions/1',
-            'signature' => 'qWZxzcTp3WUmyQQpapynnF2805nd7fddMRmM2G4NIRE=',
+            'signature' => 'Rmo/PTJGNS6JPyBtenatm3vU2+R6bK13EkwTy/Fo6zs=',
         ];
 
         $this->confirmRequest($expected);
@@ -258,7 +258,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'readerLogins',
-            'signature' => 'cJCL/mWynKKdSjVUttGNWERIzjskXZ0VUblfw3C+iHc=',
+            'signature' => 'nKXWVeZQ25ivUWQm7SM+ll8MaIyz+pFgGpYK6SMQLhY=',
         ];
 
         $this->confirmRequest($expected);
@@ -274,7 +274,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'readerLogins/12345',
-            'signature' => 'rb/jMW4sulh+VWiSWY2iUTNu4MU1YvlIqbH14xUdWxg=',
+            'signature' => 'G+Ru03oGaAr2kAh4lLgL4Q/BMazQ8OCplX5XtGbB37E=',
         ];
 
         $this->confirmRequest($expected);
@@ -290,7 +290,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'publications',
-            'signature' => '5CAjuJTseacSkprZFnRKC6f0+WHivGa/6FgRUzJ6PWs=',
+            'signature' => 'coP57NXLVPI4DmCIIt6kHv+8uzpcj2hyYpzGT2zIE1Q=',
         ];
 
         $this->confirmRequest($expected);
@@ -306,7 +306,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'publications/12345',
-            'signature' => 'D/hzgfwmswf4p1Wv0KIA4BFtVU+DhutrtYCMegs0/KA=',
+            'signature' => 'h6nYTPVYkbprvCMObhxNXjMMPTNB/Tcjav9U0MZdjWs=',
         ];
 
         $this->confirmRequest($expected);
@@ -322,7 +322,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'subscriptions',
-            'signature' => 'BZjXY3s82ASidPctyoV8RvyCAMgazBor0yzB/3eLvHY=',
+            'signature' => 'bDkNUGSrNvBXsXeYF+kTT5lDtaCNnBU9OkwaPJA5K/8=',
         ];
 
         $this->confirmRequest($expected);
@@ -338,7 +338,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'subscriptions/12345',
-            'signature' => 'b54QPFtq0zKjE8+o/yOURaPBglFuCX9fg/6oGKQDhN8=',
+            'signature' => 'MHs6UjmLES6uuGrtcTJP9ujDnA0OaBiDl9bj2D2MNIQ=',
         ];
 
         $this->confirmRequest($expected);
@@ -354,7 +354,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'subscriptionPeriods',
-            'signature' => '88d9yO5qZFvK3w+e6qq64AHz5vrOdfKQrx2d/078EYk=',
+            'signature' => '2HlFO1zdEHEkDf1kpn2sQmbuD0/gcvj/xTuygtq434w=',
         ];
 
         $this->confirmRequest($expected);
@@ -370,7 +370,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'GET',
             'uri'       => 'subscriptionPeriods/12345',
-            'signature' => 'Xww4CZet4IGxWWZb87y04MpIChQugH2VaemzJipRr0w=',
+            'signature' => 'IlHSTVOIOFBzhq2XuX2SN26w5B3eenwcUPL9hD6FOV8=',
         ];
 
         $this->confirmRequest($expected);
@@ -381,7 +381,7 @@ class PublisherTest extends PublisherTestCase
      */
     public function testCreateSubscriptionPeriod()
     {
-        $this->publisher->createSubscriptionPeriod ([
+        $this->publisher->createSubscriptionPeriod([
             'reader'       => '1234',
             'subscription' => '9876',
             'startDate'    => '2014-11-01T00:00:00Z',
@@ -391,8 +391,8 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'POST',
             'uri'       => 'subscriptionPeriods',
-            'signature' => 'JkzerFPhIvq2koUyRdQ85JEwYKkQpgMK/JO/VQFC6l8=',
-            'body'      => $this->loadXML('createSubscriptionPeriod')
+            'signature' => 'Fvsqng8GEBKTrE/kveQFmoquLVAxPrGeupe6MP/J9wI=',
+            'body'      => $this->loadXML('createSubscriptionPeriod'),
         ];
 
         $this->confirmRequest($expected);
@@ -404,15 +404,15 @@ class PublisherTest extends PublisherTestCase
     public function testUpdateSubscriptionPeriod()
     {
         $this->publisher->updateSubscriptionPeriod(1, [
-            'startDate'    => '2014-11-01T00:00:00Z',
-            'expiryDate'   => '2016-11-01T00:00:00Z',
+            'startDate'  => '2014-11-01T00:00:00Z',
+            'expiryDate' => '2016-11-01T00:00:00Z',
         ]);
 
         $expected = [
             'method'    => 'PUT',
             'uri'       => 'subscriptionPeriods/1',
-            'signature' => 'ySKUxGAIHwHtqm6fyBh2aOy1EIJbnODJTblIAjYkEPM=',
-            'body'      => $this->loadXML('updateSubscriptionPeriod')
+            'signature' => 'jFJuAuMpPU9xndNSd6SOVzWWwbjP1GGiKuV2/ebuW3A=',
+            'body'      => $this->loadXML('updateSubscriptionPeriod'),
         ];
 
         $this->confirmRequest($expected);
@@ -428,7 +428,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'DELETE',
             'uri'       => 'subscriptionPeriods/1',
-            'signature' => '0bskRVavJKlqq0Tx46Gz9GuyBFH085l2GBll9chHYss=',
+            'signature' => '9zHLdJMJclAjHZ4XQFCJ8wb1Ef6Mg2i+7kwDd0Km6/4=',
         ];
 
         $this->confirmRequest($expected);
@@ -444,7 +444,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'DELETE',
             'uri'       => 'readers/1/authorisedDevices',
-            'signature' => 'sRVvFojkx/D3WIVtbu6N0LzUlt1ieRhdHO5n1YJbOsM=',
+            'signature' => 'dWomJCXo5OzPRMynVY9sUoADmRUn1mE8Yayh15vRenc=',
         ];
 
         $this->confirmRequest($expected);
@@ -460,8 +460,8 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'PUT',
             'uri'       => 'readers/1/authentication',
-            'signature' => '9amqmnkCs/Sl6an49Nc5qzQKUQ2AOmydR+gRuR2qQDo=',
-            'body'      => $this->loadXML('authenticatePassword')
+            'signature' => 'ha+XHFDtSrkek9hbUu/H7KBSRQ6NaQJVkQOHhoWqJW8=',
+            'body'      => $this->loadXML('authenticatePassword'),
         ];
 
         $this->confirmRequest($expected);
@@ -477,8 +477,8 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'POST',
             'uri'       => 'token',
-            'signature' => 'Xp8ZZmAB26PTIM3cBpZSSvBxG+mClE4xuaRvX3ZVko4=',
-            'body'      => $this->loadXML('createToken')
+            'signature' => '2qYDsY1UNp51ySIUjpcSgl8OJbJMunIwe/p8UAXCDHY=',
+            'body'      => $this->loadXML('createToken'),
         ];
 
         $this->confirmRequest($expected);
@@ -494,8 +494,8 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'POST',
             'uri'       => 'publications/1/token',
-            'signature' => 'iNoWAX3Tgkmpu4EK8Tprc5mDh2taoIPKI84eRkGhMVM=',
-            'body'      => $this->loadXML('createToken')
+            'signature' => 'egBFkCmj4hVBfkKg3Zdhbsv2TktjEHH7M15nD+9jXC4=',
+            'body'      => $this->loadXML('createToken'),
         ];
 
         $this->confirmRequest($expected);
@@ -511,8 +511,8 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'POST',
             'uri'       => 'editions/1/token',
-            'signature' => 'jz3mKFZS77mJ3NNY210JhdvtivjrwdXOUhzblwU8rFk=',
-            'body'      => $this->loadXML('createToken')
+            'signature' => '5u8Ay/LgbMHKD4ECpEAprDexiG6uvAiFvVmijxQ5j6U=',
+            'body'      => $this->loadXML('createToken'),
         ];
 
         $this->confirmRequest($expected);
@@ -536,12 +536,200 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'POST',
             'uri'       => 'targetedNotifications',
-            'signature' => 'iN65qAI/m51oH2yMop7LHbJb0erUWmE6Y5b8Bp1koII=',
-            'body'      => $this->loadXML('sendTargetedNotification')
+            'signature' => 'MFSsdOddnSTCyLyOPOlZmDszlW9SepgZ2tUTMXspkXs=',
+            'body'      => $this->loadXML('sendTargetedNotification'),
         ];
 
         $this->confirmRequest($expected);
     }
+
+    /**
+     * Get Categories
+     */
+    public function testGetCategories()
+    {
+        $this->publisher->getCategories();
+
+        $expected = [
+            'method'    => 'GET',
+            'uri'       => 'categories',
+            'signature' => '05fMVndSXKDiph2WfpICTCbXQ6Z/SbKO7jBDOwq2sD8=',
+            'body'      => '',
+        ];
+
+        $this->confirmRequest($expected);
+    }
+
+    /**
+     * Create Category
+     */
+    public function testCreateCategory()
+    {
+        $this->publisher->createCategory([
+            'categoryTitle'     => 'Category Example',
+            'code'              => 'CATEGORY_EXAMPLE',
+            'containsAll'       => 'true',
+            'defaultCategory'   => 'false',
+            'ordering'          => '4',
+            'publicationNodeId' => '61',
+        ]);
+
+        $expected = [
+            'method'    => 'POST',
+            'uri'       => 'categories',
+            'signature' => 'd3sxk09nNsGjJ1bO0bIkpRe/Euvj9Kf4IwSScTar+Eg=',
+            'body'      => $this->loadXML('createCategory'),
+        ];
+
+        $this->confirmRequest($expected);
+    }
+
+    /**
+     * Delete Categories
+     */
+    public function testDeleteCategories()
+    {
+        $this->publisher->deleteCategories('12345');
+
+        $expected = [
+            'method'    => 'DELETE',
+            'uri'       => 'categories',
+            'signature' => 'YYpBhnedj99QHIVgzpZt6KQ+9fV/uya43Xm3gjmRqag=',
+            'body'      => '',
+        ];
+
+        $this->assertEquals($expected['method'], $this->getRequestMethod());
+        $this->assertEquals(self::SERVICE_URL . $expected['uri'] . "?publicationNodeId=12345&timestamp=" . self::TIMESTAMP, $this->getRequestUri());
+        $this->assertEquals(self::KEY, $this->getRequestAuthentication());
+        $this->assertEquals(self::CONTENT_TYPE, $this->getRequestContentType());
+        $this->assertEquals($expected['signature'], $this->getRequestSignature());
+    }
+
+    /**
+     * Get Category
+     */
+    public function testGetCategory()
+    {
+        $this->publisher->getCategory('category_code');
+
+        $expected = [
+            'method'    => 'GET',
+            'uri'       => 'categories/category_code',
+            'signature' => 'AD7zOnZT/XVOXUfdZ07m+eCirpY8WaqRRZNcTH1JRUs=',
+            'body'      => '',
+        ];
+
+        $this->confirmRequest($expected);
+    }
+
+    /**
+     * Update Category
+     */
+    public function testUpdateCategory()
+    {
+        $this->publisher->updateCategory('category_code', '12345', [
+            'categoryTitle'     => 'Category Example',
+            'code'              => 'CATEGORY_EXAMPLE',
+            'containsAll'       => 'true',
+            'defaultCategory'   => 'false',
+            'ordering'          => '4',
+            'publicationNodeId' => '61',
+        ]);
+
+        $expected = [
+            'method'    => 'PUT',
+            'uri'       => 'categories/category_code',
+            'signature' => 'D/0Ufp8Q597dBJFeZV2CtMZ6aPpWE8V8GLIsHSHojAI=',
+            'body'      => $this->loadXML('createCategory'),
+        ];
+
+        $this->assertEquals($expected['method'], $this->getRequestMethod());
+        $this->assertEquals(self::SERVICE_URL . $expected['uri'] . "?publicationNodeId=12345&timestamp=" . self::TIMESTAMP, $this->getRequestUri());
+        $this->assertEquals(self::KEY, $this->getRequestAuthentication());
+        $this->assertEquals(self::CONTENT_TYPE, $this->getRequestContentType());
+        $this->assertEquals($expected['signature'], $this->getRequestSignature());
+    }
+
+    /**
+     * Delete Category
+     */
+    public function testDeleteCategory()
+    {
+        $this->publisher->deleteCategory('category_code', '12345');
+
+        $expected = [
+            'method'    => 'DELETE',
+            'uri'       => 'categories/category_code',
+            'signature' => '5Ng7812Urbs5KV5Kkv+Z1e5kxp06KTC6VrXZJmbhBQo=',
+            'body'      => '',
+        ];
+
+        $this->assertEquals($expected['method'], $this->getRequestMethod());
+        $this->assertEquals(self::SERVICE_URL . $expected['uri'] . "?publicationNodeId=12345&timestamp=" . self::TIMESTAMP, $this->getRequestUri());
+        $this->assertEquals(self::KEY, $this->getRequestAuthentication());
+        $this->assertEquals(self::CONTENT_TYPE, $this->getRequestContentType());
+        $this->assertEquals($expected['signature'], $this->getRequestSignature());
+    }
+
+    /**
+     * Get Category Editions
+     */
+    public function testGetCategoryEditions()
+    {
+        $this->publisher->getCategoryEditions();
+
+        $expected = [
+            'method'    => 'GET',
+            'uri'       => 'categoryEditions',
+            'signature' => 'zvX0DcmsyQq3N+b0FTUPS88FSPuWDMN2Ghe56A/LDg4=',
+            'body'      => '',
+        ];
+
+        $this->confirmRequest($expected);
+    }
+
+    /**
+     * Create Category Edition
+     */
+    public function testCreateCategoryEdition()
+    {
+        $this->publisher->createCategoryEdition([
+            'code'              => 'CATEGORY_EXAMPLE',
+            'editionId'         => '72',
+            'publicationNodeId' => '58',
+        ]);
+
+        $expected = [
+            'method'    => 'POST',
+            'uri'       => 'categoryEditions',
+            'signature' => 'qHkXM1Q5wOL/6XbPZNwlnKV1NYXXFAB7JiXmy+H9GU8=',
+            'body'      => $this->loadXML('createCategoryEdition'),
+        ];
+
+        $this->confirmRequest($expected);
+    }
+
+    /**
+     * Delete Category Edition
+     */
+    public function testDeleteCategoryEdition()
+    {
+        $this->publisher->deleteCategoryEdition([ "publicationNodeId" => 12345, "code" => "category_code" ]);
+
+        $expected = [
+            'method'    => 'DELETE',
+            'uri'       => 'categoryEditions',
+            'signature' => 'DtixtaHhs2p1fV4OORPcD3Deob2DjVfi4LaYTT9HcG0=',
+            'body'      => '',
+        ];
+
+        $this->assertEquals($expected['method'], $this->getRequestMethod());
+        $this->assertEquals(self::SERVICE_URL . $expected['uri'] . "?publicationNodeId=12345&code=category_code&timestamp=" . self::TIMESTAMP, $this->getRequestUri());
+        $this->assertEquals(self::KEY, $this->getRequestAuthentication());
+        $this->assertEquals(self::CONTENT_TYPE, $this->getRequestContentType());
+        $this->assertEquals($expected['signature'], $this->getRequestSignature());
+    }
+    //testDeleteCategoryEdition
 
 }
 
