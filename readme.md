@@ -204,6 +204,64 @@ $publisher->createEditionToken('admin@exmaple.com', 74244556);
 ```
 $publisher->sendTargetedNotification(7145646, 'title', 'message', ['admin@example.com'], [ 356h64gqh65h545vhj6, 4574655w5ujw65w5a5], 'HIGH', 'false');
 ```
+#### Get Categories
+```
+$publisher->getCategories();
+```
+#### Create Category
+```
+$publisher->createCategory([
+    'categoryTitle'     => 'How to build a time machine',
+    'code'              => 'adventure',
+    'containsAll'       => 'true',
+    'defaultCategory'   => 'false',
+    'ordering'          => '4',
+    'publicationNodeId' => '61',
+]);
+```
+#### Delete ALL Categories
+```
+$publisher->deleteCategories(124252);
+```
+#### Get Specific Category
+```
+$publisher->getCategories('adventure');
+```
+#### Update Category
+```
+$publisher->updateCategory([
+    'categoryTitle'     => 'Do you remember the time?',
+    'code'              => 'adventure',
+    'containsAll'       => 'true',
+    'defaultCategory'   => 'false',
+    'ordering'          => '4',
+    'publicationNodeId' => '61',
+]);
+```
+#### Delete Category
+```
+$publisher->deleteCategory('adventure', '61');
+```
+#### Get Category Editions
+```
+$publisher->getCategoryEditions();
+```
+#### Create Category Edition
+```
+$publisher->getCategoryEdition([
+    'code'              => 'adventure',
+    'editionId'         => '64562',
+    'publicationNodeId' => '61',
+]);
+```
+#### Delete Category Edition
+```
+$publisher->deleteCategoryEdition([
+    'publicationNodeId' => '61'
+    'code'              => 'adventure'
+]);
+```
+
 ## Custom Request
 
 In addition to using the methods above, it may be desirable to build the request manually. If this is the case the underlying request methods are exposed and chainable so that any request can be made. It doesnt matter what order the chained methods are added so long as the make() method is that last method to be called. 
