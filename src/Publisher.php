@@ -135,6 +135,44 @@ class Publisher extends RequestHandler {
     }
 
     /**
+     * Create Edition
+     *
+     * Creates a new Publisher Edition
+     *
+     * @param array $data
+     */
+    public function createEdition($data)
+    {
+        $xml = XMLBuilder::createEdition($data);
+        return $this->method('POST')->resource('editions')->data($xml)->make();
+    }
+
+    /**
+     * Update Edition
+     *
+     * Updates a  Publisher Edition
+     * @param int $id
+     * @param array $data
+     */
+    public function updateEdition($id, $data)
+    {
+        $xml = XMLBuilder::createEdition($data);
+        return $this->method("PUT")->resource("editions/$id")->data($xml)->make();
+    }
+
+    /**
+     * Delete Edition
+     *
+     * Deletes a Publisher Edition
+     *
+     * @param int $id
+     */
+    public function deleteEdition($id)
+    {
+        return $this->method('DELETE')->resource('editions/' . $id)->make();
+    }
+
+    /**
      * Get Permissions
      *
      * Lists edition permissions by reader
