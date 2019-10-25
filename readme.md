@@ -103,6 +103,41 @@ $publisher->getEditions();
 ```
 $publisher->getEdition(12345);
 ```
+#### Create Edition
+```
+$publisher->createEdition([
+    "name" => "My Edition",
+    "onDeviceName" => "My Edition",
+    "shortName" => "MY1",
+    "targetState" => [
+        "web" => "LIVE",
+    ],
+    "documentUrl" => "https://s3-eu-west-1.amazonaws.com/my.account/test/example.pdf",
+    "publicationNodeId" => "4325325",
+    "pageBillingType" => "PLATFORM"
+]);
+```
+#### Update Edition
+```
+$publisher->updateEdition(6894180, [
+    "name" => "My Edition",
+    "onDeviceName" => "My Edition",
+    "shortName" => "My Edition",
+    "drmEnabled" => "true",
+    "iosSaleEnabled" => "true",
+    "androidSaleOption" => "FREE",
+    "enableSharingByEmail" => "false",
+    "enablePrinting" => "true",
+    "targetState" => [
+        "web" => "LIVE",
+    ],
+    "pageBillingType" => "PLATFORM"
+]);
+```
+#### Delete Edition
+```
+$publisher->deleteEdition(371457);
+```
 #### Get Permissions
 ```
 $publisher->getPermissions();
