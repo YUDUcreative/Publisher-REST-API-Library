@@ -44,6 +44,43 @@ class XMLBuilder {
     }
 
     /**
+     * Create Edition
+     *
+     * Builds expected XML for creating an Edition
+     *
+     * @param $data
+     * @return string
+     */
+    public static function createEdition($data)
+    {
+        $dom = new DomDocument();
+
+        $edition = $dom->createElementNS('http://schema.yudu.com', "editionState");
+
+        $dom->appendChild($edition);
+
+        foreach($data as $key => $value)
+        {
+            if($key === "targetState"){
+                $targetState = $dom->createElement('targetState');
+                foreach($value as $platform => $state)
+                {
+                    $element = $dom->createElement($platform);
+                    $element->appendChild($dom->createTextNode($state));
+                    $targetState->appendChild($element);
+                }
+                $edition->appendChild($targetState);
+            } else {
+                $element = $dom->createElement($key);
+                $element->appendChild($dom->createTextNode($value));
+                $edition->appendChild($element);
+            }
+        }
+
+        return $dom->saveXML();
+    }
+
+    /**
      * Update Reader
      *
      * Builds expected XML for updating a reader
