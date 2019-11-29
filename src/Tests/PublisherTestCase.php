@@ -30,7 +30,7 @@ class PublisherTestCase extends TestCase {
     /**
      * Publisher API Base Service URL
      */
-    const SERVICE_URL = "https://api.yudu.com/Yudu/services/2.0/";
+    const SERVICE_URL = "https://api.yudu.com/Yudu/services/2.1/";
 
     /**
      * Request Timestamp

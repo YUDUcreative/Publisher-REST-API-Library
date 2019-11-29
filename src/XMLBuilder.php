@@ -44,6 +44,43 @@ class XMLBuilder {
     }
 
     /**
+     * Create Edition
+     *
+     * Builds expected XML for creating an Edition
+     *
+     * @param $data
+     * @return string
+     */
+    public static function createEdition($data)
+    {
+        $dom = new DomDocument();
+
+        $edition = $dom->createElementNS('http://schema.yudu.com', "editionState");
+
+        $dom->appendChild($edition);
+
+        foreach($data as $key => $value)
+        {
+            if($key === "targetState"){
+                $targetState = $dom->createElement('targetState');
+                foreach($value as $platform => $state)
+                {
+                    $element = $dom->createElement($platform);
+                    $element->appendChild($dom->createTextNode($state));
+                    $targetState->appendChild($element);
+                }
+                $edition->appendChild($targetState);
+            } else {
+                $element = $dom->createElement($key);
+                $element->appendChild($dom->createTextNode($value));
+                $edition->appendChild($element);
+            }
+        }
+
+        return $dom->saveXML();
+    }
+
+    /**
      * Update Reader
      *
      * Builds expected XML for updating a reader
@@ -303,6 +340,59 @@ class XMLBuilder {
 
         return $dom->saveXML();
     }
+
+    /**
+     * Create Category
+     *
+     * Builds expected XML for creating a category
+     *
+     * @param $data
+     * @return string
+     */
+    public static function createCategory($data)
+    {
+        $dom = new DomDocument();
+
+        $category = $dom->createElementNS('http://schema.yudu.com', "category");
+
+        $dom->appendChild($category);
+
+        foreach($data as $key => $value)
+        {
+            $element = $dom->createElement($key);
+            $element->appendChild($dom->createTextNode($value));
+            $category->appendChild($element);
+        }
+
+        return $dom->saveXML();
+    }
+
+    /**
+     * Create Category Edition
+     *
+     * Builds expected XML for creating a categoryEdition
+     *
+     * @param $data
+     * @return string
+     */
+    public static function createCategoryEdition($data)
+    {
+        $dom = new DomDocument();
+
+        $categoryEdition = $dom->createElementNS('http://schema.yudu.com', "categoryEdition");
+
+        $dom->appendChild($categoryEdition);
+
+        foreach($data as $key => $value)
+        {
+            $element = $dom->createElement($key);
+            $element->appendChild($dom->createTextNode($value));
+            $categoryEdition->appendChild($element);
+        }
+
+        return $dom->saveXML();
+    }
+
 }
 
 

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<category xmlns="http://schema.yudu.com">
+    <categoryTitle>Category Example</categoryTitle>
+    <code>CATEGORY_EXAMPLE</code>
+    <containsAll>true</containsAll>
+    <defaultCategory>false</defaultCategory>
+    <ordering>4</ordering>
+    <publicationNodeId>61</publicationNodeId>
+</category>
