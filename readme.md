@@ -124,7 +124,7 @@ $publisher->updateEdition(6894180, [
     "onDeviceName" => "My Edition",
     "shortName" => "My Edition",
     "drmEnabled" => "true",
-    "iosSaleEnabled" => "FREE",
+    "iosSaleOption" => "FREE",
     "androidSaleOption" => "FREE",
     "enableSharingByEmail" => "false",
     "enablePrinting" => "true",
