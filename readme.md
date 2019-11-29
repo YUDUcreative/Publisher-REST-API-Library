@@ -254,9 +254,9 @@ $publisher->createCategory([
     'publicationNodeId' => '61',
 ]);
 ```
-#### Delete ALL Categories
+#### Delete ALL Categories (from specific node)
 ```
-$publisher->deleteCategories(124252);
+$publisher->deleteCategories('124252');
 ```
 #### Get Specific Category
 ```
@@ -283,7 +283,7 @@ $publisher->getCategoryEditions();
 ```
 #### Create Category Edition
 ```
-$publisher->getCategoryEdition([
+$publisher->createCategoryEdition([
     'code'              => 'adventure',
     'editionId'         => '64562',
     'publicationNodeId' => '61',
