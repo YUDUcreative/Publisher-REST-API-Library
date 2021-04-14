@@ -536,7 +536,7 @@ class PublisherTest extends PublisherTestCase
         $expected = [
             'method'    => 'POST',
             'uri'       => 'targetedNotifications',
-            'signature' => 'MFSsdOddnSTCyLyOPOlZmDszlW9SepgZ2tUTMXspkXs=',
+            'signature' => 'oyd/HZ/gMh+BMgaBh0snBTLkXYt9mz2jJdy86CD8cfI=',
             'body'      => $this->loadXML('sendTargetedNotification'),
         ];
 

@@ -2,9 +2,7 @@
 
 namespace Yudu\Publisher;
 
-use Yudu\Publisher\RequestHandler;
-use Yudu\Publisher\ResponseHandler;
-use Yudu\Publisher\XMLBuilder;
+use GuzzleHttp\Client;
 
 /**
  * Publisher
@@ -24,15 +22,15 @@ use Yudu\Publisher\XMLBuilder;
 class Publisher extends RequestHandler {
 
     /**
-     * Request constructor.
+     * Publisher constructor.
      *
-     * @param $key
-     * @param $secret
-     * @param $options
-     * @param $client
-     * @throws \Exception
+     * @param  string  $key
+     * @param  string  $secret
+     * @param  array  $options
+     * @param  string  $version
+     * @param  \GuzzleHttp\Client|null  $client
      */
-    public function __construct($key, $secret, Array $options = [], \GuzzleHttp\Client $client = null)
+    public function __construct(string $key, string $secret, array $options = [], string $version = '2.1', Client $client = null)
     {
         parent::__construct(...func_get_args());
     }
@@ -41,6 +39,10 @@ class Publisher extends RequestHandler {
      * Get Links
      *
      * Returns a list of links to the other available URIs
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\Publisher|\Yudu\Publisher\ResponseHandler
      */
     public function getLinks()
     {
@@ -50,11 +52,12 @@ class Publisher extends RequestHandler {
     /**
      * Get Reader
      *
-     * Returns a Publisher reader
-     *
-     * @param int $id
+     * @param  string  $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getReader($id)
+    public function getReader(string $id): ResponseHandler
     {
         return $this->method('GET')->resource("readers/$id")->make();
     }
@@ -64,9 +67,12 @@ class Publisher extends RequestHandler {
      *
      * Returns a list of readers
      *
-     * @param array $query
+     * @param  array  $query
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getReaders($query = [])
+    public function getReaders(array $query = []): ResponseHandler
     {
         return $this->method('GET')->resource('readers')->query($query)->make();
     }
@@ -76,9 +82,12 @@ class Publisher extends RequestHandler {
      *
      * Creates a new Publisher Reader
      *
-     * @param array $data
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function createReader($data)
+    public function createReader(array $data): ResponseHandler
     {
         $xml = XMLBuilder::createReader($data);
         return $this->method('POST')->resource('readers')->data($xml)->make();
@@ -89,10 +98,13 @@ class Publisher extends RequestHandler {
      *
      * Updates a Publisher Reader
      *
-     * @param int $id
-     * @param array $data
+     * @param  string  $id
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function updateReader($id, $data)
+    public function updateReader(string $id, array $data): ResponseHandler
     {
         $xml = XMLBuilder::updateReader($id, $data);
         return $this->method('PUT')->resource('readers/' . $id)->data($xml)->make();
@@ -103,9 +115,12 @@ class Publisher extends RequestHandler {
      *
      * Deletes a Publisher Reader
      *
-     * @param int $id
+     * @param string $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function deleteReader($id)
+    public function deleteReader(string $id): ResponseHandler
     {
         return $this->method('DELETE')->resource('readers/' . $id)->make();
     }
@@ -115,9 +130,12 @@ class Publisher extends RequestHandler {
      *
      * Returns a list of editions
      *
-     * @param array $query
+     * @param  array  $query
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getEditions($query = [])
+    public function getEditions(array $query = []): ResponseHandler
     {
         return $this->method('GET')->resource('editions')->query($query)->make();
     }
@@ -127,9 +145,12 @@ class Publisher extends RequestHandler {
      *
      * Returns a specific edition
      *
-     * @param int $id
+     * @param  string  $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getEdition($id)
+    public function getEdition(string $id): ResponseHandler
     {
         return $this->method('GET')->resource("editions/$id" )->make();
     }
@@ -139,9 +160,12 @@ class Publisher extends RequestHandler {
      *
      * Creates a new Publisher Edition
      *
-     * @param array $data
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function createEdition($data)
+    public function createEdition(array $data): ResponseHandler
     {
         $xml = XMLBuilder::createEdition($data);
         return $this->method('POST')->resource('editions')->data($xml)->make();
@@ -151,10 +175,14 @@ class Publisher extends RequestHandler {
      * Update Edition
      *
      * Updates a  Publisher Edition
-     * @param int $id
-     * @param array $data
+     *
+     * @param  string  $id
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function updateEdition($id, $data)
+    public function updateEdition(string $id, array $data): ResponseHandler
     {
         $xml = XMLBuilder::createEdition($data);
         return $this->method("PUT")->resource("editions/$id")->data($xml)->make();
@@ -165,9 +193,12 @@ class Publisher extends RequestHandler {
      *
      * Deletes a Publisher Edition
      *
-     * @param int $id
+     * @param  string  $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function deleteEdition($id)
+    public function deleteEdition(string $id): ResponseHandler
     {
         return $this->method('DELETE')->resource('editions/' . $id)->make();
     }
@@ -177,9 +208,12 @@ class Publisher extends RequestHandler {
      *
      * Lists edition permissions by reader
      *
-     * @param array $query
+     * @param  array  $query
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getPermissions($query = [])
+    public function getPermissions(array $query = []): ResponseHandler
     {
         return $this->method('GET')->resource("permissions")->query($query)->make();
     }
@@ -189,9 +223,12 @@ class Publisher extends RequestHandler {
      *
      * Retrieves a specific permission
      *
-     * @param int $id
+     * @param  string  $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getPermission($id)
+    public function getPermission(string $id): ResponseHandler
     {
         return $this->method('GET')->resource("permissions/$id")->make();
     }
@@ -201,9 +238,12 @@ class Publisher extends RequestHandler {
      *
      * Creates a new permission for a reader
      *
-     * @param array $data
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function createPermission($data)
+    public function createPermission(array $data): ResponseHandler
     {
         $xml = XMLBuilder::createPermission($data);
         return $this->method('POST')->resource('permissions')->data($xml)->make();
@@ -214,10 +254,13 @@ class Publisher extends RequestHandler {
      *
      * Updates a readers permission
      *
-     * @param int $id
-     * @param array $data
+     * @param  string  $id
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function updatePermission($id, $data)
+    public function updatePermission(string $id, array $data): ResponseHandler
     {
         $xml = XMLBuilder::updatePermission($id, $data);
         return $this->method('PUT')->resource("permissions/$id")->data($xml)->make();
@@ -228,9 +271,12 @@ class Publisher extends RequestHandler {
      *
      * Deletes permission for a reader
      *
-     * @param array $data
+     * @param  string  $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function deletePermission($id)
+    public function deletePermission(string $id): ResponseHandler
     {
         return $this->method('DELETE')->resource('permissions/' . $id)->make();
     }
@@ -238,11 +284,14 @@ class Publisher extends RequestHandler {
     /**
      * Get Reader Logins
      *
-     * Retreives all reader logins
+     * Retrieves all reader logins
      *
-     * @param array $query
+     * @param  array  $query
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getReaderLogins($query = [])
+    public function getReaderLogins(array $query = []): ResponseHandler
     {
         return $this->method('GET')->resource("readerLogins")->query($query)->make();
     }
@@ -250,11 +299,14 @@ class Publisher extends RequestHandler {
     /**
      * Get Reader Login
      *
-     * Retreives a reader login
+     * Retrieves a reader login
      *
-     * @param int $id
+     * @param  string  $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getReaderLogin($id)
+    public function getReaderLogin(string $id): ResponseHandler
     {
         return $this->method('GET')->resource("readerLogins/$id")->make();
     }
@@ -262,11 +314,14 @@ class Publisher extends RequestHandler {
     /**
      * Get Publications
      *
-     * Retreives list of Publications
+     * Retrieves list of Publications
      *
-     * @param array $query
+     * @param  array  $query
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\Publisher|\Yudu\Publisher\ResponseHandler
      */
-    public function getPublications($query = [])
+    public function getPublications(array $query = []): ResponseHandler
     {
         return $this->method('GET')->resource("publications")->query($query)->make();
     }
@@ -274,11 +329,14 @@ class Publisher extends RequestHandler {
     /**
      * Get Publication
      *
-     * Retreives a single Publication
+     * Retrieves a single Publication
      *
-     * @param int $id
+     * @param  string  $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getPublication($id)
+    public function getPublication(string $id): ResponseHandler
     {
         return $this->method('GET')->resource("publications/$id")->make();
     }
@@ -288,9 +346,12 @@ class Publisher extends RequestHandler {
      *
      * Retrieves all Subscriptions
      *
-     * @param array $query
+     * @param  array  $query
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getSubscriptions($query = [])
+    public function getSubscriptions(array $query = []): ResponseHandler
     {
         return $this->method('GET')->resource("subscriptions")->query($query)->make();
     }
@@ -300,9 +361,12 @@ class Publisher extends RequestHandler {
      *
      * Retrieves a single Subscription
      *
-     * @param int $id
+     * @param  string  $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getSubscription($id)
+    public function getSubscription(string $id): ResponseHandler
     {
         return $this->method('GET')->resource("subscriptions/$id")->make();
     }
@@ -312,9 +376,12 @@ class Publisher extends RequestHandler {
      *
      * Retrieves all subscription periods
      *
-     * @param array $query
+     * @param  array  $query
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getSubscriptionPeriods($query = [])
+    public function getSubscriptionPeriods(array $query = []): ResponseHandler
     {
         return $this->method('GET')->resource("subscriptionPeriods")->query($query)->make();
     }
@@ -324,9 +391,12 @@ class Publisher extends RequestHandler {
      *
      * Retrieves a single subscription period
      *
-     * @param int $id
+     * @param  string  $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getSubscriptionPeriod($id)
+    public function getSubscriptionPeriod(string $id): ResponseHandler
     {
         return $this->method('GET')->resource("subscriptionPeriods/$id")->make();
     }
@@ -336,9 +406,12 @@ class Publisher extends RequestHandler {
      *
      * Creates a new subscription period
      *
-     * @param array $query
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function createSubscriptionPeriod($data)
+    public function createSubscriptionPeriod(array $data): ResponseHandler
     {
         $xml = XMLBuilder::createSubscriptionPeriod($data);
         return $this->method('POST')->resource("subscriptionPeriods")->data($xml)->make();
@@ -349,10 +422,13 @@ class Publisher extends RequestHandler {
      *
      * Updates a specified subscription period
      *
-     *  @param int $id
-     *  @param array $query
+     * @param  string  $id
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function updateSubscriptionPeriod($id, $data)
+    public function updateSubscriptionPeriod(string $id, array $data): ResponseHandler
     {
         $xml = XMLBuilder::updateSubscriptionPeriod($id, $data);
         return $this->method('PUT')->resource("subscriptionPeriods/$id")->data($xml)->make();
@@ -363,9 +439,12 @@ class Publisher extends RequestHandler {
      *
      * Deletes a readers Subscription Period
      *
-     * @param int $id
+     * @param  string  $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function deleteSubscriptionPeriod($id)
+    public function deleteSubscriptionPeriod(string $id): ResponseHandler
     {
         return $this->method('DELETE')->resource("subscriptionPeriods/$id")->make();
     }
@@ -375,9 +454,12 @@ class Publisher extends RequestHandler {
      *
      * Removes all authorised devices for a user
      *
-     * @param int $id
+     * @param  string  $id
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function removeDevices($id)
+    public function removeDevices(string $id): ResponseHandler
     {
         return $this->method('DELETE')->resource("readers/$id/authorisedDevices")->make();
     }
@@ -387,10 +469,13 @@ class Publisher extends RequestHandler {
      *
      * Authenticates a reader's password
      *
-     * @param int $id
-     * @param string $password
+     * @param  string  $id
+     * @param  string  $password
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function authenticatePassword($id, $password)
+    public function authenticatePassword(string $id, string $password): ResponseHandler
     {
         $xml = XMLBuilder::authenticatePassword($password);
         return $this->method('PUT')->resource("readers/$id/authentication")->data($xml)->make();
@@ -402,9 +487,12 @@ class Publisher extends RequestHandler {
      * Creates Single Sign On Token
      * Token will authenticate for ANY edition
      *
-     * @param string $userId
+     * @param  string  $userId
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function createToken($userId)
+    public function createToken(string $userId): ResponseHandler
     {
         $xml = XMLBuilder::createToken($userId);
         return $this->method('POST')->resource('token')->data($xml)->make();
@@ -416,10 +504,13 @@ class Publisher extends RequestHandler {
      * Creates Single Sign On Token
      * Token will authenticate for editions at given Publication
      *
-     * @param string $userId
-     * @param int $publicationId
+     * @param  string  $userId
+     * @param  string  $publicationId
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function createPublicationToken($userId, $publicationId)
+    public function createPublicationToken(string $userId, string $publicationId): ResponseHandler
     {
         $xml = XMLBuilder::createToken($userId);
         return $this->method('POST')->resource("publications/$publicationId/token")->data($xml)->make();
@@ -431,10 +522,13 @@ class Publisher extends RequestHandler {
      * Creates Single Sign On Token
      * Token will authenticate for the edition only
      *
-     * @param string $userId
-     * @param int $editionId
+     * @param  string  $userId
+     * @param  string  $editionId
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function createEditionToken($userId, $editionId)
+    public function createEditionToken(string $userId, string $editionId): ResponseHandler
     {
         $xml = XMLBuilder::createToken($userId);
         return $this->method('POST')->resource("editions/$editionId/token")->data($xml)->make();
@@ -447,14 +541,26 @@ class Publisher extends RequestHandler {
      * Send Custom Notifications permission is required in
      * order to send targeted notifications.
      *
-     * @param int $nodeId
-     * @param string $title
-     * @param string $message
-     * @param array $subscribers
-     * @param array $thirdPartySubscribers
-     * @param string $priority
+     * @param  string  $nodeId
+     * @param  string  $title
+     * @param  string  $message
+     * @param  array  $subscribers
+     * @param  array  $thirdPartySubscribers
+     * @param  string  $priority
+     * @param  bool  $disableSound
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function sendTargetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers, $priority, $disableSound)
+    public function sendTargetedNotification(
+        string $nodeId,
+        string $title,
+        string $message,
+        array $subscribers,
+        array $thirdPartySubscribers,
+        string $priority,
+        bool $disableSound = false
+    ): ResponseHandler
     {
         $xml = XMLBuilder::targetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers, $priority, $disableSound);
         return $this->method('POST')->resource('targetedNotifications')->data($xml)->make();
@@ -465,10 +571,12 @@ class Publisher extends RequestHandler {
      *
      * Returns Publisher Categories List
      *
-     * @param array $query
-     *
+     * @param  array  $query
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getCategories($query = [])
+    public function getCategories(array $query = []): ResponseHandler
     {
         return $this->method('GET')->resource("categories")->query($query)->make();
     }
@@ -478,9 +586,12 @@ class Publisher extends RequestHandler {
      *
      * Creates a Publisher Category
      *
-     * @param array $data
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\Publisher|\Yudu\Publisher\ResponseHandler
      */
-    public function createCategory($data)
+    public function createCategory(array $data): ResponseHandler
     {
         $xml = XMLBuilder::createCategory($data);
         return $this->method('POST')->resource('categories')->data($xml)->make();
@@ -491,9 +602,12 @@ class Publisher extends RequestHandler {
      *
      * Removes ALL Categories at a specific publication node
      *
-     * @param int $publicationNode
+     * @param  string  $publicationNode
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function deleteCategories($publicationNode)
+    public function deleteCategories(string $publicationNode): ResponseHandler
     {
         return $this->method('DELETE')->resource("categories")->query(['publicationNodeId' => $publicationNode])->make();
     }
@@ -503,9 +617,12 @@ class Publisher extends RequestHandler {
      *
      * Returns specific category by category code
      *
-     * @param string $code
+     * @param  string  $code
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getCategory($code)
+    public function getCategory(string $code): ResponseHandler
     {
         return $this->method('GET')->resource("categories/$code")->make();
     }
@@ -515,11 +632,14 @@ class Publisher extends RequestHandler {
      *
      * Updates a specific category at a specific publication node
      *
-     * @param string $code
-     * @param int $publicationNode
-     * @param array $data
+     * @param  string  $code
+     * @param  string  $publicationNode
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function updateCategory($code, $publicationNode, $data)
+    public function updateCategory(string $code, string $publicationNode, array $data): ResponseHandler
     {
         $xml = XMLBuilder::createCategory($data);
         return $this->method('PUT')->resource("categories/$code")->data($xml)->query(['publicationNodeId' => $publicationNode])->make();
@@ -530,10 +650,13 @@ class Publisher extends RequestHandler {
      *
      * Removes a category at a specific publication node
      *
-     * @param string $code
-     * @param int $publicationNode
+     * @param  string  $code
+     * @param  string  $publicationNode
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function deleteCategory($code, $publicationNode)
+    public function deleteCategory(string $code, string $publicationNode): ResponseHandler
     {
         return $this->method('DELETE')->resource("categories/$code")->query(['publicationNodeId' => $publicationNode])->make();
     }
@@ -543,8 +666,12 @@ class Publisher extends RequestHandler {
      *
      * Returns list of category editions
      *
+     * @param  array  $query
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getCategoryEditions($query = [])
+    public function getCategoryEditions(array $query = []): ResponseHandler
     {
         return $this->method('GET')->resource("categoryEditions")->query($query)->make();
     }
@@ -554,9 +681,12 @@ class Publisher extends RequestHandler {
      *
      * Creates a Publisher Category Edition
      *
-     * @param array $data
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function createCategoryEdition($data)
+    public function createCategoryEdition(array $data): ResponseHandler
     {
         $xml = XMLBuilder::createCategoryEdition($data);
         return $this->method('POST')->resource('categoryEditions')->data($xml)->make();
@@ -567,10 +697,12 @@ class Publisher extends RequestHandler {
      *
      * Removes a category edition
      *
-     * @param string $code
-     * @param int $publicationNode
+     * @param  array  $query
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function deleteCategoryEdition($query = [])
+    public function deleteCategoryEdition(array $query = []): ResponseHandler
     {
         return $this->method('DELETE')->resource("categoryEditions")->query($query)->make();
     }

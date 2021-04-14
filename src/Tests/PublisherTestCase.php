@@ -51,13 +51,13 @@ class PublisherTestCase extends TestCase {
      *
      * Instantiates a publisher client for use in testing
      * Mock Guzzle is passed to prevent real api calls.
-     * @return \Bibby\Publisher\Publisher
+     * @return \Yudu\Publisher\Publisher
      * @throws \Exception
      */
     protected function buildPublisherClient($options = [])
     {
         $options['timestamp'] = self::TIMESTAMP;
-        return new Publisher(self::KEY, self::SECRET, $options, $this->mockGuzzleClient());
+        return new Publisher(self::KEY, self::SECRET, $options, $version = '2.1', $this->mockGuzzleClient());
     }
 
     /**
@@ -147,6 +147,7 @@ class PublisherTestCase extends TestCase {
      *
      * This method makes a number of assertions to confirm the headers
      * and other data are passed to guzzle exactly as expected
+     *
      * @param array $expected
      */
     protected function confirmRequest(Array $expected)

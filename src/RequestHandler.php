@@ -3,7 +3,9 @@
 namespace Yudu\Publisher;
 
 use Yudu\Publisher\Exceptions\PublisherException;
+use InvalidArgumentException;
 use GuzzleHttp\Client;
+use Exception;
 
 class RequestHandler {
 
@@ -12,7 +14,14 @@ class RequestHandler {
      *
      * @var string
      */
-    const SERVICE_URL = 'https://api.yudu.com/Yudu/services/2.1/';
+    const SERVICE_URL = 'https://api.yudu.com/Yudu/services/';
+
+    /**
+     * API Version
+     *
+     * @var string
+     */
+    private $version;
 
     /**
      * YUDU Publisher REST API Key
@@ -71,18 +80,20 @@ class RequestHandler {
     private $data;
 
     /**
-     * Request constructor.
+     * RequestHandler constructor.
      *
      * @param $key
      * @param $secret
-     * @param $options
-     * @param $client
+     * @param  array  $options
+     * @param  string  $version
+     * @param  \GuzzleHttp\Client|null  $client
      */
-    protected function __construct($key, $secret, Array $options = [], \GuzzleHttp\Client $client = null)
+    protected function __construct(string $key, string $secret, Array $options = [], string $version = '2.1', Client $client = null)
     {
         // Set credentials and options
         $this->setCredentials($key, $secret);
         $this->setOptions($options);
+        $this->setApiVersion($version);
 
         // Set HTTP Client
         $this->client = $client ? $client : new Client();
@@ -97,7 +108,7 @@ class RequestHandler {
     private function setCredentials($key = null, $secret = null)
     {
         if(!$key || !$secret){
-            throw new \InvalidArgumentException('Publisher Key AND Publisher Secret must be specified.');
+            throw new InvalidArgumentException('Publisher Key AND Publisher Secret must be specified.');
         }
         $this->key = $key;
         $this->secret = $secret;
@@ -114,10 +125,26 @@ class RequestHandler {
     {
         foreach($options as $key => $value){
             if(!in_array($key, [ "timestamp", "verify", "debug" ])){
-                throw new \InvalidArgumentException("$key is not a valid option parameter.");
+                throw new InvalidArgumentException("$key is not a valid option parameter.");
             }
         }
         $this->options = $options;
+    }
+
+    /**
+     * Set API Version
+     *
+     * Validates and sets the API version
+     *
+     * @param  string  $version
+     */
+    private function setApiVersion(string $version)
+    {
+        if(!in_array($version, [ "2.0", "2.1",])){
+            throw new InvalidArgumentException("$version is not a valid api version.");
+        }
+
+        $this->version = $version;
     }
 
     /**
@@ -129,10 +156,10 @@ class RequestHandler {
      * @return $this
      * @throws \Exception
      */
-    public function method($method)
+    public function method($method): self
     {
         if (! in_array($method, ['GET', 'POST', 'PUT', 'DELETE'])){
-            throw new \InvalidArgumentException('Invalid method type given - must be GET, POST, PUT, DELETE');
+            throw new InvalidArgumentException('Invalid method type given - must be GET, POST, PUT, DELETE');
         }
 
         $this->method = $method;
@@ -147,7 +174,7 @@ class RequestHandler {
      * @param string $resource
      * @return $this
      */
-    public function resource($resource)
+    public function resource(string $resource): self
     {
         $this->resource = ltrim($resource, '/');
         return $this;
@@ -161,7 +188,7 @@ class RequestHandler {
      * @param array $query
      * @return $this
      */
-    public function query($query = [])
+    public function query(array $query = []): self
     {
         foreach($query as $key => $value)
         {
@@ -178,7 +205,7 @@ class RequestHandler {
      * @param string $data
      * @return $this
      */
-    public function data($data)
+    public function data(string $data): self
     {
         $this->data = $data;
         return $this;
@@ -189,9 +216,9 @@ class RequestHandler {
      *
      * @return string
      */
-    private function createRequestUrl()
+    private function createRequestUrl(): string
     {
-        return self::SERVICE_URL . $this->resource . '?' .  http_build_query($this->query);
+        return self::SERVICE_URL . $this->version . '/' . $this->resource . '?' .  http_build_query($this->query);
     }
 
     /**
@@ -201,7 +228,7 @@ class RequestHandler {
      *
      * @return string
      */
-    private function createSignature()
+    private function createSignature(): string
     {
         return base64_encode(hash_hmac('sha256', $this->stringToSign(), $this->secret, true));
     }
@@ -213,9 +240,9 @@ class RequestHandler {
      *
      * @return string
      */
-    private function stringToSign()
+    private function stringToSign(): string
     {
-        return $this->method . '/Yudu/services/2.1/' . $this->resource . '?' .  $this->createQueryString() . $this->data;
+        return $this->method . '/Yudu/services/' . $this->version . '/' . $this->resource . '?' .  $this->createQueryString() . $this->data;
     }
 
     /**
@@ -226,7 +253,7 @@ class RequestHandler {
      *
      * @return string
      */
-    private function createQueryString()
+    private function createQueryString(): string
     {
         // Sort query alphabetically
         ksort($this->query);
@@ -234,17 +261,19 @@ class RequestHandler {
         // Build query string from query
         $queryString = http_build_query($this->query);
 
-        // Only returns urldecoded query string
+        // Only returns url decoded query string
         return urldecode($queryString);
     }
 
     /**
      * Reset
      *
-     * Resets class variables back to starting values to
-     * prevent contaminating subsequent requests.
+     * Resets class variables back to starting values to prevent
+     * contaminating subsequent requests.
+     *
+     * @return void
      */
-    private function reset()
+    private function reset(): void
     {
         $this->method = null;
         $this->resource = null;
@@ -257,14 +286,14 @@ class RequestHandler {
      *
      * Makes an HTTP request to the YUDU Publisher API
      *
-     * @return $this
      * @throws \Yudu\Publisher\Exceptions\PublisherException
      * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function make()
+    public function make(): ResponseHandler
     {
         try {
-            // Unless overriden ensure current timestamp is set
+            // Unless overridden ensure current timestamp is set
             $this->query['timestamp'] = $this->options['timestamp'] ?? time();
 
             // Begin output buffering
@@ -297,7 +326,7 @@ class RequestHandler {
 
             return new ResponseHandler($response, $request);
         }
-        catch(\Exception $e) {
+        catch(Exception $e) {
             throw new PublisherException($e);
         } finally {
             $this->reset();

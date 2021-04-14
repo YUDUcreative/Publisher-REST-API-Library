@@ -2,6 +2,9 @@
 
 namespace Yudu\Publisher;
 
+use Psr\Http\Message\ResponseInterface;
+use SimpleXMLElement;
+
 /**
  * Response Handler
  *
@@ -10,7 +13,7 @@ namespace Yudu\Publisher;
  * @license   MIT License
  * @link      https://github.com/YUDUcreative/Publisher-REST-API-Library
  *
- * This class wraps the Guzzle Response Object and provides a few
+ * This class wraps the Guzzle Response Interface and provides a few
  * convenient methods to transform the response.
  */
 class ResponseHandler {
@@ -18,7 +21,7 @@ class ResponseHandler {
     /**
      * Response Object
      *
-     * \GuzzleHttp\Psr7\Response
+     * @var ResponseInterface
      */
     private $response;
 
@@ -30,12 +33,12 @@ class ResponseHandler {
     private $request;
 
     /**
-     * ResponseHandler constructor
+     * ResponseHandler constructor.
      *
-     * @param \GuzzleHttp\Psr7\Response $response
-     * @param null|string $raw
+     * @param  \Psr\Http\Message\ResponseInterface  $response
+     * @param  array  $request
      */
-    public function __construct(\GuzzleHttp\Psr7\Response $response, array $request = [])
+    public function __construct(ResponseInterface $response, array $request = [])
     {
         $this->response = $response;
         $this->request = $request;
@@ -46,9 +49,20 @@ class ResponseHandler {
      *
      * @return array
      */
-    public function request()
+    public function request(): array
     {
         return $this->request;
+    }
+
+    /**
+     * Response Data
+     *
+     * @return ResponseInterface
+     *
+     */
+    public function response(): ResponseInterface
+    {
+        return $this->response;
     }
 
     /**
@@ -56,7 +70,7 @@ class ResponseHandler {
      *
      * @return string
      */
-    public function raw()
+    public function raw(): ?string
     {
         return $this->request->raw ?? null;
     }
@@ -66,7 +80,7 @@ class ResponseHandler {
      *
      * @return int
      */
-    public function statusCode()
+    public function statusCode(): int
     {
         return $this->response->getStatusCode();
     }
@@ -74,9 +88,9 @@ class ResponseHandler {
     /**
      * Guzzle
      *
-     * @return \GuzzleHttp\Psr7\Response
+     * @return ResponseInterface
      */
-    public function guzzle()
+    public function guzzle(): ResponseInterface
     {
         return $this->response;
     }
@@ -86,7 +100,7 @@ class ResponseHandler {
      *
      * @return \SimpleXMLElement
      */
-    public function xml()
+    public function xml(): SimpleXMLElement
     {
         return simplexml_load_string($this->response->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA, 'http://schema.yudu.com');
     }
@@ -96,7 +110,7 @@ class ResponseHandler {
      *
      * @return string
      */
-    public function xmlString()
+    public function xmlString(): ?string
     {
         return $this->xml() ? $this->xml()->asXML() : null;
     }
@@ -106,7 +120,7 @@ class ResponseHandler {
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->response->getBody()->getContents();
     }
