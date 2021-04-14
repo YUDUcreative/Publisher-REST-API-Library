@@ -314,15 +314,20 @@ After making a call to Publisher a ResponseHandler object is returned. The Respo
 Below demonstrates the methods that can be used after making a request:
 
 ```
-
 // Makes request for readers ($results is a ResponseHandler Object)
 $results = $publisher->getReaders();
+
+// An array of request information
+$results = $results->request();
+
+// A GuzzleHttp Response
+$results = $results->response();
 
 // Get the request HTTP status code e.g 200
 $status = $results->statusCode();   
 
 // Convert results to Simple XML Object 
-$xml_object = $results->xml 
+$xml_object = $results->xml()
 
 // Convert results to XML string
 $xml_string = $results->xmlString();
