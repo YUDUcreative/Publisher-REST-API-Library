@@ -42,9 +42,9 @@ class Publisher extends RequestHandler {
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Yudu\Publisher\Exceptions\PublisherException
-     * @return \Yudu\Publisher\Publisher|\Yudu\Publisher\ResponseHandler
+     * @return \Yudu\Publisher\ResponseHandler
      */
-    public function getLinks()
+    public function getLinks(): ResponseHandler
     {
         return $this->method('GET')->resource('')->make();
     }
