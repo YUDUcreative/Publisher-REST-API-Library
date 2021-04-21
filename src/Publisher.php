@@ -559,7 +559,7 @@ class Publisher extends RequestHandler {
         array $subscribers,
         array $thirdPartySubscribers,
         string $priority,
-        bool $disableSound = false
+        bool $disableSound
     ): ResponseHandler
     {
         $xml = XMLBuilder::targetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers, $priority, $disableSound);

@@ -289,10 +289,10 @@ class XMLBuilder {
      * @param array $thirdPartySubscribers
      * @param array $subscribers
      * @param string $priority
-     * @param string $disableSound
+     * @param bool $disableSound
      * @return string
      */
-    public static function targetedNotification($nodeId, $title, $message, $subscribers = [], $thirdPartySubscribers = [], $priority = "DEFAULT", $disableSound = "false")
+    public static function targetedNotification($nodeId, $title, $message, $subscribers = [], $thirdPartySubscribers = [], $priority = "DEFAULT", $disableSound = false)
     {
         $dom = new DomDocument();
 
