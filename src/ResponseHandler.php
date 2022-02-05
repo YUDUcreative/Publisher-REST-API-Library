@@ -98,9 +98,9 @@ class ResponseHandler {
     /**
      * Xml
      *
-     * @return \SimpleXMLElement
+     * @return \SimpleXMLElement|bool
      */
-    public function xml(): SimpleXMLElement
+    public function xml()
     {
         return simplexml_load_string($this->response->getBody(), 'SimpleXMLElement', LIBXML_NOCDATA, 'http://schema.yudu.com');
     }
