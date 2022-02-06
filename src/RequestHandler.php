@@ -121,7 +121,7 @@ class RequestHandler {
      *
      * @param $options
      */
-    private function setOptions($options)
+    public function setOptions($options)
     {
         foreach($options as $key => $value){
             if(!in_array($key, [ "timestamp", "verify", "debug" ])){

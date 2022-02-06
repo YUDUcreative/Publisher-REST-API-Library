@@ -98,7 +98,7 @@ class ResponseHandler {
     /**
      * Xml
      *
-     * @return \SimpleXMLElement|bool
+     * @return SimpleXMLElement|bool
      */
     public function xml()
     {
