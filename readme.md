@@ -201,14 +201,14 @@ $publisher->createSubscriptionPeriod([
     'reader'       => 126417872,
     'subscription' => 6482745,
     'startDate'    => '2019-01-11T00:00:00Z',
-    'endDate'      => '2020-01-11T00:00:00Z',
+    'expiryDate'      => '2020-01-11T00:00:00Z',
 ]);
 ```
 #### Update Subscription Period
 ```
 $publisher->updateSubscriptionPeriod(2351346 [
     'startDate'    => '2020-01-11T00:00:00Z',
-    'endDate'      => '2021-01-11T00:00:00Z',
+    'expiryDate'      => '2021-01-11T00:00:00Z',
 ]);
 ```
 #### Delete Subscription Period
