@@ -14,7 +14,7 @@ class RequestHandler {
      *
      * @var string
      */
-    const SERVICE_URL = 'https://api.yudu.com/Yudu/services/';
+    private $serviceUrl;
 
     /**
      * API Version
@@ -87,8 +87,9 @@ class RequestHandler {
      * @param  array  $options
      * @param  string  $version
      * @param  \GuzzleHttp\Client|null  $client
+     * @param  string $serviceUrl
      */
-    protected function __construct(string $key, string $secret, Array $options = [], string $version = '2.1', Client $client = null)
+    protected function __construct(string $key, string $secret, Array $options = [], string $version = '2.1', Client $client = null, string $serviceUrl = 'https://api.yudu.com/Yudu/services/')
     {
         // Set credentials and options
         $this->setCredentials($key, $secret);
@@ -97,6 +98,9 @@ class RequestHandler {
 
         // Set HTTP Client
         $this->client = $client ? $client : new Client();
+
+        // Set the service URL
+        $this->serviceUrl = $serviceUrl;
     }
 
     /**
@@ -218,7 +222,7 @@ class RequestHandler {
      */
     private function createRequestUrl(): string
     {
-        return self::SERVICE_URL . $this->version . '/' . $this->resource . '?' .  http_build_query($this->query);
+        return $this->serviceUrl . $this->version . '/' . $this->resource . '?' .  http_build_query($this->query);
     }
 
     /**
