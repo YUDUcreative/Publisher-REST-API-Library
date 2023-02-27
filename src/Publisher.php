@@ -29,8 +29,9 @@ class Publisher extends RequestHandler {
      * @param  array  $options
      * @param  string  $version
      * @param  \GuzzleHttp\Client|null  $client
+     * @param  string $serviceUrl
      */
-    public function __construct(string $key, string $secret, array $options = [], string $version = '2.1', Client $client = null)
+    public function __construct(string $key, string $secret, array $options = [], string $version = '2.1', Client $client = null, string $serviceUrl = 'https://api.yudu.com/Yudu/services/')
     {
         parent::__construct(...func_get_args());
     }
