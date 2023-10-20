@@ -125,11 +125,21 @@ class XMLBuilder {
 
         $dom->appendChild($permission);
 
-        foreach($data as $key => $value)
-        {
-            $element = $dom->createElement($key);
-            $element->setAttribute("id", $value);
-            $permission->appendChild($element);
+        // Add required reader element
+        $reader = $dom->createElement('reader');
+        $reader->setAttribute("id", $data['reader']);
+        $permission->appendChild($reader);
+
+        // Add required edition element
+        $edition = $dom->createElement('edition');
+        $edition->setAttribute("id", $data['edition']);
+        $permission->appendChild($edition);
+
+        // Add optional expiry date
+        if($data['expiryDate']){
+            $expiryDate = $dom->createElement('expiryDate');
+            $expiryDate->appendChild($dom->createTextNode($data['expiryDate']));
+            $permission->appendChild($expiryDate);
         }
 
         return $dom->saveXML();

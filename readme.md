@@ -149,14 +149,15 @@ $publisher->getPermission(16346);
 #### Create Permission
 ```
 $publisher->createPermission([
-    'reader' => 2356346,
-    'edition'=> 6795595,
+    'reader'     => 2356346,
+    'edition'    => 6795595,
+    'expiryDate" => "2024-06-01T00:00:00Z'
 ]);
 ```
 #### Update Permission
 ```
-$publisher->updatePermission( 132365, [
-    'expiryDate' => 2356346,
+$publisher->updatePermission(132365, [
+    'expiryDate' => '2024-06-01T00:00:00Z'
 ]);
 ```
 #### Delete Permission
