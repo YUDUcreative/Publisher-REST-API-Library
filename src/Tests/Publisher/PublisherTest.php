@@ -729,7 +729,6 @@ class PublisherTest extends PublisherTestCase
         $this->assertEquals(self::CONTENT_TYPE, $this->getRequestContentType());
         $this->assertEquals($expected['signature'], $this->getRequestSignature());
     }
-    //testDeleteCategoryEdition
 
     /**
      * Get Third Party Subscriber Id
