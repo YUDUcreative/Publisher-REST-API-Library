@@ -708,6 +708,21 @@ class Publisher extends RequestHandler {
         return $this->method('DELETE')->resource("categoryEditions")->query($query)->make();
     }
 
+    /**
+     * Get Third Party Subscriber Id
+     *
+     * Returns the id of a third party subscriber
+     *
+     * @param  array  $data
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \Yudu\Publisher\Exceptions\PublisherException
+     * @return \Yudu\Publisher\ResponseHandler
+     */
+    public function getThirdPartySubscriberId(array $data): ResponseHandler
+    {
+        $xml = XMLBuilder::createThirdPartySubscriberIdRequestData($data);
+        return $this->method('POST')->resource('thirdPartySubscribers')->data($xml)->make();
+    }
 }
 
 
