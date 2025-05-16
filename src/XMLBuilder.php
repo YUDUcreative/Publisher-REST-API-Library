@@ -403,6 +403,31 @@ class XMLBuilder {
         return $dom->saveXML();
     }
 
+    /**
+     * Get Third Party Subscriber Id
+     *
+     * Builds expected XML for retrieving a third party subscriber id
+     *
+     * @param $data
+     * @return string
+     */
+    public static function createThirdPartySubscriberIdRequestData($data)
+    {
+        $dom = new DomDocument();
+
+        $thirdPartySubscriber = $dom->createElementNS('http://schema.yudu.com', "thirdPartySubscriber");
+
+        $dom->appendChild($thirdPartySubscriber);
+
+        foreach($data as $key => $value)
+        {
+            $element = $dom->createElement($key);
+            $element->appendChild($dom->createTextNode($value));
+            $thirdPartySubscriber->appendChild($element);
+        }
+
+        return $dom->saveXML();
+    }
 }
 
 

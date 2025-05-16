@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<thirdPartySubscriber xmlns="http://schema.yudu.com">
+    <token>test.user@example.com</token>
+    <editionId>12345</editionId>
+</thirdPartySubscriber>
