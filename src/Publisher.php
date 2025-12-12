@@ -539,8 +539,7 @@ class Publisher extends RequestHandler {
      * Send Targeted Notifications
      *
      * Sends out a targeted notification to specified subscribers
-     * Send Custom Notifications permission is required in
-     * order to send targeted notifications.
+     * Send Custom Notifications publisher permission is required
      *
      * @param  string  $nodeId
      * @param  string  $title
@@ -549,6 +548,8 @@ class Publisher extends RequestHandler {
      * @param  array  $thirdPartySubscribers
      * @param  string  $priority
      * @param  bool  $disableSound
+     * @param  string|null  $ideviceDeepLink
+     * @param  string|null  $androidDeepLink
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Yudu\Publisher\Exceptions\PublisherException
      * @return \Yudu\Publisher\ResponseHandler
@@ -560,10 +561,21 @@ class Publisher extends RequestHandler {
         array $subscribers,
         array $thirdPartySubscribers,
         string $priority,
-        bool $disableSound
+        bool $disableSound,
+        ?string $ideviceDeepLink = null,
+        ?string $androidDeepLink = null
     ): ResponseHandler
     {
-        $xml = XMLBuilder::targetedNotification($nodeId, $title, $message, $subscribers, $thirdPartySubscribers, $priority, $disableSound);
+        $xml = XMLBuilder::targetedNotification(
+            $nodeId,
+            $title, $message,
+            $subscribers,
+            $thirdPartySubscribers,
+            $priority,
+            $disableSound,
+            $ideviceDeepLink,
+            $androidDeepLink
+        );
         return $this->method('POST')->resource('targetedNotifications')->data($xml)->make();
     }
 

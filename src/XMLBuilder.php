@@ -300,9 +300,21 @@ class XMLBuilder {
      * @param array $subscribers
      * @param string $priority
      * @param bool $disableSound
+     * @param null|string $ideviceDeepLink
+     * @param null|string $androidDeepLink
      * @return string
      */
-    public static function targetedNotification($nodeId, $title, $message, $subscribers = [], $thirdPartySubscribers = [], $priority = "DEFAULT", $disableSound = false)
+    public static function targetedNotification(
+        $nodeId,
+        $title,
+        $message,
+        $subscribers = [],
+        $thirdPartySubscribers = [],
+        $priority = "DEFAULT",
+        $disableSound = false,
+        $ideviceDeepLink = null,
+        $androidDeepLink = null
+    )
     {
         $dom = new DomDocument();
 
@@ -344,6 +356,18 @@ class XMLBuilder {
             $element = $dom->createElement('thirdPartySubscriberToken');
             $element->appendChild($dom->createTextNode($thirdPartySubscriber));
             $_subscribers->appendChild($element);
+        }
+
+        if($ideviceDeepLink) {
+            $_ideviceDeepLink = $dom->createElement('iDeviceDeepLink');
+            $_ideviceDeepLink->appendChild($dom->createTextNode($ideviceDeepLink));
+            $targetedNotification->appendChild($_ideviceDeepLink);
+        }
+
+        if($androidDeepLink) {
+            $_androidDeepLink = $dom->createElement('androidDeepLink');
+            $_androidDeepLink->appendChild($dom->createTextNode($androidDeepLink));
+            $targetedNotification->appendChild($_androidDeepLink);
         }
 
         $targetedNotification->appendChild($_subscribers);
