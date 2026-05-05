@@ -550,6 +550,7 @@ class Publisher extends RequestHandler {
      * @param  bool  $disableSound
      * @param  string|null  $ideviceDeepLink
      * @param  string|null  $androidDeepLink
+     * @param  string|null  $windowsDeepLink
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Yudu\Publisher\Exceptions\PublisherException
      * @return \Yudu\Publisher\ResponseHandler
@@ -563,7 +564,8 @@ class Publisher extends RequestHandler {
         string $priority,
         bool $disableSound,
         ?string $ideviceDeepLink = null,
-        ?string $androidDeepLink = null
+        ?string $androidDeepLink = null,
+        ?string $windowsDeepLink = null
     ): ResponseHandler
     {
         $xml = XMLBuilder::targetedNotification(
@@ -574,7 +576,8 @@ class Publisher extends RequestHandler {
             $priority,
             $disableSound,
             $ideviceDeepLink,
-            $androidDeepLink
+            $androidDeepLink,
+            $windowsDeepLink
         );
         return $this->method('POST')->resource('targetedNotifications')->data($xml)->make();
     }

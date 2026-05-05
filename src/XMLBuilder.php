@@ -302,6 +302,7 @@ class XMLBuilder {
      * @param bool $disableSound
      * @param null|string $ideviceDeepLink
      * @param null|string $androidDeepLink
+     * @param null|string $windowsDeepLink
      * @return string
      */
     public static function targetedNotification(
@@ -313,7 +314,8 @@ class XMLBuilder {
         $priority = "DEFAULT",
         $disableSound = false,
         $ideviceDeepLink = null,
-        $androidDeepLink = null
+        $androidDeepLink = null,
+        $windowsDeepLink = null
     )
     {
         $dom = new DomDocument();
@@ -368,6 +370,12 @@ class XMLBuilder {
             $_androidDeepLink = $dom->createElement('androidDeepLink');
             $_androidDeepLink->appendChild($dom->createTextNode($androidDeepLink));
             $targetedNotification->appendChild($_androidDeepLink);
+        }
+
+        if($windowsDeepLink) {
+            $_windowsDeepLink = $dom->createElement('windowsDeepLink');
+            $_windowsDeepLink->appendChild($dom->createTextNode($windowsDeepLink));
+            $targetedNotification->appendChild($_windowsDeepLink);
         }
 
         $targetedNotification->appendChild($_subscribers);
