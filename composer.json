@@ -1,7 +1,7 @@
 {
     "name": "yudu/publisher",
     "description": "YUDU Publisher REST API Library - PHP",
-    "type": "project",
+    "type": "library",
     "license" : "MIT",
     "require": {
         "guzzlehttp/guzzle": "^6.3 || ^7.0",
